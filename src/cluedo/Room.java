@@ -14,14 +14,13 @@ import java.util.Map;
  */
 public class Room extends Card {
 
-	public final String name;
 	private List<Suspect> suspects;
 	private List<Weapon> weapons;
 	private Map<Integer, Exit> exits;
 	private Room teleport;
 
 	public Room(String name) {
-		this.name = name;
+		super.name = name;
 		this.suspects = new ArrayList<Suspect>();
 		this.weapons = new ArrayList<Weapon>();
 		this.exits = new HashMap<Integer, Exit>();

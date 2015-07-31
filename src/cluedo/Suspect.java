@@ -7,12 +7,11 @@ package cluedo;
 public class Suspect extends Card {
 
 	private Room room; //Room the suspect is currently in, null if not in a room.
-	private String name;
 	private String code;
 	private int x, y; //coordinates on Board
 
 	public Suspect(String name, String code, int x, int y) {
-		this.name = name;
+		super.name = name;
 		this.code = code;
 		this.x = x;
 		this.y = y;

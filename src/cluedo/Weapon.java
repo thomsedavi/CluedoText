@@ -7,7 +7,7 @@ package cluedo;
  */
 public class Weapon extends Card {
 
-	final String name, code;
+	final String code;
 	private Room room;
 
 	/**
@@ -15,7 +15,7 @@ public class Weapon extends Card {
 	 * @param code Two character representation of Weapon
 	 */
 	public Weapon(String name, String code) {
-		this.name = name;
+		super.name = name;
 		this.code = code;
 	}
 

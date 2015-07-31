@@ -7,7 +7,6 @@ import java.util.Random;
 
 /**
  * Contains the deck of cards.
- *
  * @author Pauline Kelly
  *
  */
@@ -31,7 +30,7 @@ public class Deck {
 		while (true) {
 			for (Player p : players) {
 				p.addToHand(cards.remove(0)); // removes the first card, others
-												// slide down
+				// slide down
 				if (cards.isEmpty()) {
 					return players;
 				}
@@ -53,13 +52,12 @@ public class Deck {
 
 		index = rand.nextInt(weapons.size() - 1);
 
-		this.cards.add(weapons.get(index));
+		this.solution[0] = weapons.get(index);
 
 		index = rand.nextInt(rooms.size() - 1);
-		this.cards.add(rooms.get(index));
-
+		this.solution[1] = weapons.get(index);
 		index = rand.nextInt(suspects.size() - 1);
-		this.cards.add(suspects.get(index));
+		this.solution[2] = weapons.get(index);
 	}
 
 	/**
@@ -69,6 +67,7 @@ public class Deck {
 	 */
 	public void shuffleCards(List<Card> weapons, List<Card> rooms,
 			List<Card> suspects) {
+
 		cards.addAll(weapons);
 		cards.addAll(rooms);
 		cards.addAll(suspects);
