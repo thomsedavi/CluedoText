@@ -34,6 +34,8 @@ public class GameOfCluedo {
 
 	private Board board;
 
+	private Hud hud;
+
 	private List<Player> players;
 
 	public GameOfCluedo() throws InterruptedException {
@@ -77,9 +79,11 @@ public class GameOfCluedo {
 			e.printStackTrace();
 		}
 
+		hud = new Hud(SUSPECTS);
+
 		System.out.println("Ok, set! Player 1, start.\n");
 
-		displayBoard();
+		displayBoard(0);
 	}
 
 	/**
@@ -122,13 +126,11 @@ public class GameOfCluedo {
 					} else {
 						System.out
 								.println("That number wasn't an option.\n Please try again:");
-						sc.next();
 						continue;
 					}
 				} catch (InputMismatchException e) {
 					System.out.println("Please enter an integer:");
 					sc.next();
-					continue;
 				}
 			}
 		}
@@ -184,8 +186,27 @@ public class GameOfCluedo {
 		}
 	}
 
-	private void displayBoard() {
-		board.printBoard(SUSPECTS[0]);
+	private void displayBoard(int suspect) {
+		String result;
+		boolean teleport = board.canTeleport(SUSPECTS[suspect]);
+
+		Room temp = SUSPECTS[suspect].getRoom();
+		if (temp != null)
+			temp.showExits();
+
+		for (int y = 0; y < 27; y++) {
+			result = "";
+			result = result + board.getLine(y, SUSPECTS[suspect]);
+			result = result + "     ";
+			result = result
+					+ hud.display(y, SUSPECTS[suspect],
+							teleport);
+			System.out.print(result);
+
+		}
+
+		if (temp != null)
+			temp.hideExits();
 	}
 
 	public static void main(String[] args) throws InterruptedException {

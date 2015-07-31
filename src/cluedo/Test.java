@@ -46,7 +46,7 @@ public class Test {
 			e.printStackTrace();
 		}
 
-		board.printBoard(suspects[2]);
-		board.moveSuspect(suspects[1], Direction.NORTH);
+		for (int y = 0; y < 27; y++)
+			board.getLine(y, suspects[2]);
 	}
 }

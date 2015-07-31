@@ -102,10 +102,10 @@ public class Board {
 				text = text + "\u2592";
 
 			tiles[x][y] = new TextTile(text);
-		} else if (string.length() == 3){
+		} else if (string.length() == 3) {
 			tiles[x][y] = new RoomTile(rooms[Integer.parseInt(string.substring(
 					0, 1))], Integer.parseInt(string.substring(1, 3)));
-		} else if (string.length() == 4){
+		} else if (string.length() == 4) {
 			int rom = Integer.parseInt(string.substring(0, 1));
 			int xit = Integer.parseInt(string.substring(3, 4));
 			Exit exit = new Exit(xit, x, y);
@@ -134,19 +134,13 @@ public class Board {
 		throw new InvalidDirectionError("Not a valid direction");
 	}
 
-	public void printBoard(Suspect suspect) {
-		Room temp = suspect.getRoom();
-		if (temp != null)
-			temp.showExits();
-		for (int y = 0; y < BOARD_HEIGHT; y++) {
-			for (int x = 0; x < BOARD_WIDTH; x++) {
-				System.out.print(tiles[x][y].getCode());
-			}
-			System.out.println();
+	public String getLine(int y, Suspect suspect) {
+		String result = "";
+		for (int x = 0; x < BOARD_WIDTH; x++) {
+			result = result + tiles[x][y].getCode();
 		}
 		System.out.println();
-		if (temp != null)
-			temp.hideExits();
+		return result;
 	}
 
 	public void moveSuspect(Suspect suspect, Direction direction) {
@@ -237,8 +231,7 @@ public class Board {
 
 			suspect.setLocation(x, y);
 			tiles[x][y].setSuspect(suspect);
-		}
-		else {
+		} else {
 			throw new InvalidMoveError("Suspect not in a room");
 		}
 	}
