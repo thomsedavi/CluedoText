@@ -43,13 +43,13 @@ public class Door implements Tile {
 	public String getCode() {
 		switch (entranceDirection) {
 		case NORTH:
-			return "^^";			//north
+			return "\u25FF\u25FA";			//north
 		case EAST:
-			return "\u2591\u25B7";	//east
+			return "\u2592\u25B7";	//east
 		case SOUTH:
-			return "vv";			//south
+			return "\u25F9\u25F8";			//south
 		case WEST:
-			return "\u25C1\u2591";  //west
+			return "\u25C1\u2592";  //west
 		}
 		throw new InvalidDirectionError("Not a valid direction");
 	}

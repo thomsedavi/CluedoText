@@ -11,9 +11,11 @@ public class Suspect extends Card {
 	private String code;
 	private int x, y; //coordinates on Board
 
-	public Suspect(String name, String code) {
+	public Suspect(String name, String code, int x, int y) {
 		this.name = name;
 		this.code = code;
+		this.x = x;
+		this.y = y;
 	}
 
 	public String getName() {

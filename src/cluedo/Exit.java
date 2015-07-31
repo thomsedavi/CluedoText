@@ -9,12 +9,14 @@ package cluedo;
  */
 public class Exit implements Tile {
 
-	final String exitNumber;
+	final int exitNumber, x, y;
 	private boolean active;
 	private Suspect suspect;
 
-	public Exit(String exitNumber) {
+	public Exit(int exitNumber, int x, int y) {
 		this.exitNumber = exitNumber;
+		this.x = x;
+		this.y = y;
 		active = false;
 	}
 
@@ -22,9 +24,10 @@ public class Exit implements Tile {
 	public String getCode() {
 		if (suspect != null) {
 			return suspect.getCode();
-		} else if (active)
-			return exitNumber;
-		else
+		} else if (active) {
+			String result = "\u2607" + exitNumber;
+			return result;
+		} else
 			return "  ";
 	}
 
@@ -49,5 +52,13 @@ public class Exit implements Tile {
 
 	public void deactivate() {
 		active = false; // will draw floor when called
+	}
+
+	public int getX() {
+		return x;
+	}
+
+	public int getY() {
+		return y;
 	}
 }

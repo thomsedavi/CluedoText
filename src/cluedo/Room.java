@@ -1,7 +1,9 @@
 package cluedo;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Rooms need to know about: - the suspects they contain. - the weapons they
@@ -15,17 +17,18 @@ public class Room extends Card {
 	public final String name;
 	private List<Suspect> suspects;
 	private List<Weapon> weapons;
-	private List<Exit> exits;
+	private Map<Integer, Exit> exits;
+	private Room teleport;
 
 	public Room(String name) {
 		this.name = name;
 		this.suspects = new ArrayList<Suspect>();
 		this.weapons = new ArrayList<Weapon>();
-		this.exits = new ArrayList<Exit>();
+		this.exits = new HashMap<Integer, Exit>();
 	}
 
-	public void addExit(Exit exit) {
-		exits.add(exit);
+	public void addExit(int i, Exit exit) {
+		exits.put(i, exit);
 	}
 
 	public void addSuspect(Suspect suspect) {
@@ -60,17 +63,17 @@ public class Room extends Card {
 	 */
 	public String getCode(int position) {
 		if (position == 0) {
-			return "\u2591\u2591";
+			return "\u2592\u2592";
 		} else if (position > 0) {
 			if (suspects.size() >= position)
 				return suspects.get(position - 1).getCode();
 			else
-				return "\u2591\u2591";
+				return "\u2592\u2592";
 		} else {
 			if (weapons.size() >= Math.abs(position))
 				return weapons.get(Math.abs(position) - 1).getCode();
 			else
-				return "\u2591\u2591";
+				return "\u2592\u2592";
 		}
 	}
 
@@ -82,8 +85,8 @@ public class Room extends Card {
 	 * Shows all the exits out of the room.
 	 */
 	public void showExits() {
-		for (Exit x : exits) {
-			x.activate();
+		for (int i : exits.keySet()) {
+			exits.get(i).activate();
 		}
 	}
 
@@ -91,8 +94,8 @@ public class Room extends Card {
 	 * Stops showing all the exits out of the room.
 	 */
 	public void hideExits() {
-		for (Exit x : exits) {
-			x.deactivate();
+		for (int i : exits.keySet()) {
+			exits.get(i).deactivate();
 		}
 	}
 
@@ -102,6 +105,26 @@ public class Room extends Card {
 	 * @return The list of all possible exits from a room.
 	 */
 	public List<Exit> getExits() {
-		return exits;
+		List<Exit> exitList = new ArrayList<Exit>();
+		for (int i : exits.keySet()) {
+			exitList.add(exits.get(i));
+		}
+		return exitList;
+	}
+
+	public int getExitX(int exit) {
+		 return exits.get(exit).getX();
+	}
+
+	public int getExitY(int exit) {
+		 return exits.get(exit).getY();
+	}
+
+	public void addTeleport(Room teleport) {
+		this.teleport = teleport;
+	}
+
+	public Room getTeleport() {
+		return teleport;
 	}
 }
