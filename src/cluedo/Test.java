@@ -24,15 +24,15 @@ public class Test {
 		weapons[4] = new Weapon("Rope", "Rp");
 		weapons[5] = new Weapon("Spanner", "Sp");
 
-		rooms[0] = new Room("Kitchen");
-		rooms[1] = new Room("Ball Room");
-		rooms[2] = new Room("Conservatory");
-		rooms[3] = new Room("Billiard Room");
-		rooms[4] = new Room("Library");
-		rooms[5] = new Room("Study");
-		rooms[6] = new Room("Hall");
-		rooms[7] = new Room("Lounge");
-		rooms[8] = new Room("Dining Room");
+		rooms[0] = new Room("Kitchen", "KI");
+		rooms[1] = new Room("Ball Room", "BA");
+		rooms[2] = new Room("Conservatory", "CO");
+		rooms[3] = new Room("Billiard Room", "BI");
+		rooms[4] = new Room("Library", "LI");
+		rooms[5] = new Room("Study", "ST");
+		rooms[6] = new Room("Hall", "HA");
+		rooms[7] = new Room("Lounge", "LO");
+		rooms[8] = new Room("Dining Room", "DR");
 
 		rooms[0].addTeleport(rooms[5]);
 		rooms[5].addTeleport(rooms[0]);
