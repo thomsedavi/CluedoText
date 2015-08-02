@@ -50,15 +50,16 @@ public class Deck {
 	 * @param rooms
 	 * @param suspects
 	 */
-	public void getSolution(List<Card> weapons, List<Card> rooms,
-			List<Card> suspects) {
+	public void getSolution(List<Card> weapons, List<Card> rooms, List<Card> suspects) {
 		Random rand = new Random();
 		int index;
 
 		index = rand.nextInt(weapons.size() - 1);
 		this.solution[0] = suspects.get(index);
+		
 		index = rand.nextInt(rooms.size() - 1);
 		this.solution[1] = rooms.get(index);
+		
 		index = rand.nextInt(suspects.size() - 1);
 		this.solution[2] = weapons.get(index);
 	}
@@ -107,9 +108,12 @@ public class Deck {
 	 * @return Whether all the Cards match
 	 */
 	public boolean checkSolution(Suspect suspect, Room room, Weapon weapon) {
-		if(suspect.equals(solutionSuspect) &&
-				room.equals(solutionRoom) &&
-				weapon.equals(solutionWeapon)){
+		System.out.println("S:" + solution[0] + "R:" + solution[1] + "W" + solution[2]);
+		System.out.println("S:" + suspect + "R:" + room + "W" + weapon);
+		
+		if(suspect.equals(solution[0]) &&
+				room.equals(solution[1]) &&
+				weapon.equals(solution[2])){
 			return true;
 		}
 		return false;

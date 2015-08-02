@@ -8,6 +8,7 @@ public class Player {
 	private List <Card> hand;
 	private String name;
 	private Suspect suspect;
+	private boolean eliminated = false;
 
 	public Player(String name, Suspect selected) {
 		this.name = name;
@@ -47,6 +48,14 @@ public class Player {
 				result++;
 		}
 		return result;
+	}
+
+	public void eliminate() {
+		this.eliminated = true;		
+	}
+	
+	public boolean isEliminated(){
+		return this.eliminated;
 	}
 
 }

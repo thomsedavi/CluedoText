@@ -40,12 +40,11 @@ public class GameOfCluedo {
 	private Deck deck;
 	private Hud hud;
 
-
+	boolean isWon = false;
 
 	int movesRemaining;
 
 	private Card[] suggestion;
-
 
 	private List<Player> players;
 
@@ -55,6 +54,7 @@ public class GameOfCluedo {
 		Scanner sc = new Scanner(System.in);
 		initialise(sc);
 		run(sc);
+		System.out.println("Game Over!");
 	}
 
 	/**
@@ -63,16 +63,26 @@ public class GameOfCluedo {
 	 * @throws InterruptedException
 	 */
 	private void run(Scanner sc) throws InterruptedException {
-		boolean isWon = false;
-
-		while (!isWon) {
+		while (!isWon) {						//checks if the game has been won
 			for(Player player : players){
+
+				if(player.isEliminated()){		//Checks if the player was eliminated from the game
+					continue;
+				}
 				displayBoard(player, STATUS.START_TURN);
 				getHudInput(player, sc);
+
+				//If the player has been eliminated, remove them from the list of players now.
+				//If it's the last player, then the game is over.
+				if(player.isEliminated()){
+					if(players.size() == 1){
+						System.out.println("Everybody loses! ;)");
+						return;
+					}
+					players.remove(player);
+				}	
 			}
 		}
-
-		System.out.println("Game Over!");
 	}
 
 	/**
@@ -125,34 +135,50 @@ public class GameOfCluedo {
 	 */
 	private STATUS makeAccusation(Player player, STATUS status, Scanner sc) {
 		status = STATUS.CHOOSE_SUSPECT;
-		Suspect suspect = selectSuspect(player, sc);
-		
+		displayBoard(player, status);
+		Suspect suspect = (Suspect) selectCard(player, sc, SUSPECTS);
+
 		status = STATUS.CHOOSE_ROOM;
-		Room room = selectRoom(player, sc);
-		
+		displayBoard(player, status);
+		Room room = (Room) selectCard(player, sc, ROOMS);
+
 		status = STATUS.CHOOSE_WEAPON;
-		Weapon weapon = selectWeapon(player, sc);
-		
+		displayBoard(player, status);
+		Weapon weapon = (Weapon) selectCard(player, sc, WEAPONS);
+
 		if(deck.checkSolution(suspect, room, weapon)){
-			
+			isWon = true;
+			System.out.println("You guessed right!");
 		}
-		
+		else {
+			System.out.println("You guessed wrong :(");
+			player.eliminate();
+		}
+		status = STATUS.START_TURN;
 		return status;
 	}
 
-	private Weapon selectWeapon(Player player, Scanner sc) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	private Room selectRoom(Player player, Scanner sc) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	private Suspect selectSuspect(Player player, Scanner sc) {
-		// TODO Auto-generated method stub
-		return null;
+	/**
+	 * Selects the weapon for the character to guess.
+	 * @param player
+	 * @param sc
+	 * @return
+	 */
+	private Card selectCard(Player player, Scanner sc, Card[] cards) {
+		int i = -1;
+		System.out.println("\nPlease select a number:\n");
+		while(true){
+			try {
+				i = sc.nextInt() - 1;
+				if(i >= 0 && i < cards.length){
+					return cards[i];
+				}
+				System.out.println("Number must be within bounds!");
+			} catch (InputMismatchException e) {
+				System.out.println("Please enter an integer:");
+				sc.next();
+			}
+		}
 	}
 
 	/**
@@ -183,7 +209,7 @@ public class GameOfCluedo {
 		status = STATUS.MOVE_PIECE;
 		displayBoard(player, status);
 		movesRemaining = rollDice();
-		System.out.println("You rolled a " + movesRemaining);
+		System.out.println("\nYou rolled a " + movesRemaining);
 
 		while(movesRemaining != 0){
 			movePiece(player, status, sc);  //recursively call movePiece? TODO
