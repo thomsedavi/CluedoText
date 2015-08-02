@@ -109,7 +109,7 @@ public class Hud {
 		if (y == 0)
 			return player.getName() + "'s Cards:";
 		else if (y == 3 + player.getHand().size())
-			return "Press Enter to return to main screen";
+			return "Press E to return to main screen";
 		else if (y - 2 < player.getHand().size() && y - 2 >= 0)
 			return player.getHand().get(y - 2).toString();
 		else

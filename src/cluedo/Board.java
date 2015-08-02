@@ -10,7 +10,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * Representing a Board of cluedo, containing a grid of 26x27 Tiles and a
+ * Representing a Board of Cluedo, containing a grid of 26x27 Tiles and a
  * reference to all of the Rooms on the board. All functionality involving the
  * moving of pieces around the board and checking whether they can move is done
  * through this class.
