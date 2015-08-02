@@ -13,6 +13,11 @@ import java.util.Random;
 public class Deck {
 
 	private List<Card> cards;
+	
+	private Suspect solutionSuspect;  //switch these over.
+	private Room solutionRoom;
+	private Weapon solutionWeapon;
+	
 	private Card[] solution = new Card[3];
 
 	public Deck(List<Card> weapons, List<Card> rooms, List<Card> suspects) {
@@ -51,11 +56,11 @@ public class Deck {
 		int index;
 
 		index = rand.nextInt(weapons.size() - 1);
-		this.solution[0] = weapons.get(index);
+		this.solution[0] = suspects.get(index);
 		index = rand.nextInt(rooms.size() - 1);
 		this.solution[1] = rooms.get(index);
 		index = rand.nextInt(suspects.size() - 1);
-		this.solution[2] = suspects.get(index);
+		this.solution[2] = weapons.get(index);
 	}
 
 	/**
@@ -91,5 +96,22 @@ public class Deck {
 
 	public void setCards(List<Card> cards) {
 		this.cards = cards;
+	}
+
+	/**
+	 * Checks the solution against the suggestion or the accusation.
+	 * 
+	 * @param suspect The suspect to check
+	 * @param room The room to check
+	 * @param weapon The weapon to check
+	 * @return Whether all the Cards match
+	 */
+	public boolean checkSolution(Suspect suspect, Room room, Weapon weapon) {
+		if(suspect.equals(solutionSuspect) &&
+				room.equals(solutionRoom) &&
+				weapon.equals(solutionWeapon)){
+			return true;
+		}
+		return false;
 	}
 }
