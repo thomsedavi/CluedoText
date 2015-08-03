@@ -18,7 +18,7 @@ public class Door implements Tile {
 
 		this.room = room;
 
-		//Check the direction that has been entered, store it
+		// Check the direction that has been entered, store it
 		switch (direction) {
 		case NORTH:
 			entranceDirection = Direction.NORTH;
@@ -36,26 +36,27 @@ public class Door implements Tile {
 	}
 
 	/**
-	 * The code is mapped to a set of ASCII characters, which display the direction of the door.
+	 * The code is mapped to a set of ASCII characters, which display the
+	 * direction of the door.
 	 *
 	 * @return the code for displaying the door direction on the board.
 	 */
 	public String getCode() {
 		switch (entranceDirection) {
 		case NORTH:
-			return "\u25FF\u25FA";			//north
+			return "\u25F9\u25F8"; // north
 		case EAST:
-			return "\u2592\u25B7";	//east
+			return "\u25C1\u2592"; // east
 		case SOUTH:
-			return "\u25F9\u25F8";			//south
+			return"\u25FF\u25FA"; // south
 		case WEST:
-			return "\u25C1\u2592";  //west
+			return "\u2592\u25B7"; // west
 		}
 		throw new InvalidDirectionError("Not a valid direction");
 	}
 
 	/**
-	 * Can you come from this direction into the room
+	 * Can you come from this direction into the room?
 	 *
 	 * @return Whether the player is able to move in a certain direction.
 	 */
@@ -74,8 +75,8 @@ public class Door implements Tile {
 	}
 
 	/**
-	 *  Once the player has used the Door, they will then be set up at the
-	 *  next specified position in the room.
+	 * Once the player has used the Door, they will then be set up at the next
+	 * specified position in the room.
 	 */
 	public void setSuspect(Suspect suspect) {
 		room.addSuspect(suspect);

@@ -25,7 +25,14 @@ public class Board {
 	Tile[][] tiles;
 	Room[] rooms;
 
-	/* Create each of the rooms */
+	/**
+	 * Reads a Map from a file and parses it into Tiles to place at each point
+	 * in the board. Places each Suspect used by a Player at their starting
+	 * location. Distributes the Weapons randomly into rooms with no more than
+	 * one Weapon a room.
+	 *
+	 * @throws IOException
+	 */
 	public Board(Room[] rooms, Suspect[] suspects, Weapon[] weapons)
 			throws IOException {
 
@@ -69,6 +76,9 @@ public class Board {
 		}
 	}
 
+	/**
+	 * creates an individual Tile element based a string read from a file.
+	 */
 	private void parseTile(String string, int x, int y) {
 		switch (string) {
 		case "#":
@@ -118,7 +128,15 @@ public class Board {
 		}
 	}
 
+	/**
+	 * returns true if a suspect is available to move in a particular Direction
+	 */
 	public boolean canMove(Suspect suspect, Direction direction) {
+
+		if (suspect.getRoom() != null)
+			return false; // if they are in a room, cannot move except to leave
+							// the room
+
 		int x = suspect.getX();
 		int y = suspect.getY();
 		switch (direction) {
@@ -134,7 +152,10 @@ public class Board {
 		throw new InvalidDirectionError("Not a valid direction");
 	}
 
-	public String getLine(int y, Suspect suspect) {
+	/**
+	 * returns a scanned horizontal line of the Board.
+	 */
+	public String getLine(int y) {
 		String result = "";
 		for (int x = 0; x < BOARD_WIDTH; x++) {
 			result = result + tiles[x][y].getCode();
@@ -143,6 +164,12 @@ public class Board {
 		return result;
 	}
 
+	/**
+	 * Moves a player around the board according to a compass Direction. Should
+	 * always check first whether the player can actually move in that direction
+	 * before attempting to Move ther.e
+	 *
+	 */
 	public void moveSuspect(Suspect suspect, Direction direction) {
 		int x = suspect.getX();
 		int y = suspect.getY();
@@ -168,18 +195,29 @@ public class Board {
 		throw new InvalidDirectionError("Not a valid direction");
 	}
 
+	/**
+	 * move a weapon from one room to another when a Player requests it. Weapons
+	 * are pretty ornamental.
+	 */
 	public void moveWeapon(Weapon weapon, Room room) {
 		weapon.getRoom().removeWeapon(weapon);
 		weapon.setRoom(room);
 		room.addWeapon(weapon);
 	}
 
+	/**
+	 * Checks whether a Suspect is in a room, and if so, whether that room has a
+	 * Teleporter. No restrictions are based on the Teleporter if there is one.
+	 */
 	public boolean canTeleport(Suspect suspect) {
 		if (!suspect.isInRoom())
 			return false;
 		return (suspect.getRoom().getTeleport() != null);
 	}
 
+	/**
+	 * use the Teleport to get to a room on the opposite side of the Baord.
+	 */
 	public void teleport(Suspect suspect) {
 		Room thisRoom = suspect.getRoom();
 		Room oppRoom = thisRoom.getTeleport();
@@ -189,11 +227,15 @@ public class Board {
 		oppRoom.addSuspect(suspect);
 	}
 
+	/**
+	 * Checks whether a Player can make any kind of move at all. Useful to avoid
+	 * the game getting stuck.
+	 */
 	public boolean canPlayTurn(Suspect suspect) {
 		if (suspect.isInRoom()) {
-			if (canTeleport(suspect))
+			if (canTeleport(suspect)) {
 				return true;
-			else
+			} else
 				for (Exit exit : suspect.getRoom().getExits())
 					if (exit.canMove(null))
 						return true;
@@ -208,17 +250,31 @@ public class Board {
 		}
 	}
 
+	/**
+	 * Checks whether a particular exit number is available for a Suspect to
+	 * exit a room from.
+	 */
 	public boolean canUseExit(Suspect suspect, int exit) {
 		Room tempRoom = suspect.getRoom();
 		if (tempRoom == null) {
 			return false;
 		} else {
-			int x = tempRoom.getExitX(exit);
-			int y = tempRoom.getExitY(exit);
-			return tiles[x][y].canMove(null);
+			if (tempRoom.hasExit(exit)) {
+				int x = tempRoom.getExitX(exit);
+				int y = tempRoom.getExitY(exit);
+				return tiles[x][y].canMove(null);
+			} else {
+				return false;
+			}
 		}
 	}
 
+	/**
+	 * @param suspect
+	 *            the Suspect being moved
+	 * @param exit
+	 *            the number of Exit they are using
+	 */
 	public void exitRoom(Suspect suspect, int exit) {
 		Room tempRoom = suspect.getRoom();
 		if (tempRoom != null) {
@@ -234,5 +290,17 @@ public class Board {
 		} else {
 			throw new InvalidMoveError("Suspect not in a room");
 		}
+	}
+
+	/**
+	 * Used for Testing to move pieces around the board quickly.
+	 */
+
+	public void cheatMove(Suspect suspect, int newX, int newY) {
+		int oldX = suspect.getX();
+		int oldY = suspect.getY();
+		tiles[oldX][oldY].setSuspect(null);
+		tiles[newX][newY].setSuspect(suspect);
+		suspect.setLocation(newX, newY);
 	}
 }

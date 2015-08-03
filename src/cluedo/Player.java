@@ -1,14 +1,25 @@
 package cluedo;
 
 import java.util.ArrayList;
+
 import java.util.List;
 
+/**
+ * Represents a Player in the game of Cluedo. Has a Hand of Cards and also a
+ * Suspect representing their character that is also a Card that can be in this
+ * or someone else's hand.
+ *
+ * @author Pauline Kelly & David Thomsen
+ *
+ */
 public class Player {
 
-	private List <Card> hand;
+	private List<Card> hand;
 	private String name;
 	private Suspect suspect;
-	private boolean eliminated = false;
+	private boolean eliminated = false; // whether the character has been
+										// eliminated from the game after a
+										// false Accusation
 
 	public Player(String name, Suspect selected) {
 		this.name = name;
@@ -19,7 +30,8 @@ public class Player {
 	/**
 	 * Adds the card to the players hand.
 	 *
-	 * @param The card to add to the hand
+	 * @param The
+	 *            card to add to the hand
 	 */
 	public void addToHand(Card card) {
 		hand.add(card);
@@ -38,7 +50,8 @@ public class Player {
 	}
 
 	/**
-	 * @param Cards Suggested by opponent
+	 * @param Cards
+	 *            Suggested by opponent
 	 * @return quantity of matching cards in this Player's Hand
 	 */
 	public int qtyMatching(Card[] cards) {
@@ -51,10 +64,10 @@ public class Player {
 	}
 
 	public void eliminate() {
-		this.eliminated = true;		
+		this.eliminated = true;
 	}
-	
-	public boolean isEliminated(){
+
+	public boolean isEliminated() {
 		return this.eliminated;
 	}
 

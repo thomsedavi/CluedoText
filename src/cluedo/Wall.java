@@ -18,6 +18,6 @@ public class Wall implements Tile {
 
 	@Override
 	public void setSuspect(Suspect suspect) {
-		throw new InvalidMoveError("Suspect cannot move onto this tile");
+		throw new InvalidMoveError("Suspect cannot move onto this tile"); //bummer
 	}
 }

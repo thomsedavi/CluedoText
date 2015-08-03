@@ -473,7 +473,10 @@ public class GameOfCluedo {
 
 		for (int y = 0; y < 27; y++) {
 			result = "";
-			result = result + board.getLine(y, suspect);
+			result = result + board.getLine(y);
+			if (y == suspect.getY())
+				result = result + " <-- ";
+			else
 			result = result + "     ";
 			result = result
 					+ hud.display(y, player,
