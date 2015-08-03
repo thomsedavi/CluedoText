@@ -8,7 +8,7 @@ package cluedo;
  */
 public class Corridor implements Tile {
 
-	private Suspect suspect;
+	private Suspect suspect; //can be Null
 
 	public Corridor() {
 		suspect = null;

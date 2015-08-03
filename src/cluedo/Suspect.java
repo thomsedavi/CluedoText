@@ -30,7 +30,7 @@ public class Suspect extends Card {
 	}
 
 	public void setRoom(Room room) {
-		this.room = room;
+		this.room = room; //can be set to null when exiting froom
 	}
 
 	public int getX() {
@@ -42,7 +42,7 @@ public class Suspect extends Card {
 	}
 
 	public Room getRoom() {
-		return room;
+		return room; //can return null
 	}
 
 	public boolean isInRoom() {

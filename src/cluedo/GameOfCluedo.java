@@ -49,7 +49,7 @@ public class GameOfCluedo {
 	private List<Player> players;
 
 	public GameOfCluedo() throws InterruptedException {
-		players = new ArrayList<>();
+		players = new ArrayList<Player>();
 		suggestion = new Card[3];
 		Scanner sc = new Scanner(System.in);
 		initialise(sc);
@@ -105,7 +105,7 @@ public class GameOfCluedo {
 				status = displayCards(player, status, sc);
 				break;
 			case "d": //roll dice and move
-				status = rollAndMove(player, status, sc); 
+				status = rollAndMove(player, status, sc);
 				turnOver = true;
 				break;
 			case "a": //make accusation
@@ -119,7 +119,7 @@ public class GameOfCluedo {
 			default:
 				System.out.println("Try another option.");
 				System.out.println("\n");
-				continue;  //do not display the board if input is incorrect	
+				continue;  //do not display the board if input is incorrect
 			}
 			System.out.println("\n");
 			assert status != null;
@@ -201,7 +201,7 @@ public class GameOfCluedo {
 
 	/**
 	 * Rolls the dice, and the player can choose where to move.
-	 * 
+	 *
 	 * @param player
 	 * @param sc
 	 */
@@ -213,16 +213,16 @@ public class GameOfCluedo {
 		System.out.println("\nYou rolled a " + movesRemaining);
 
 		while(movesRemaining != 0){
-			movePiece(player, status, sc);  //recursively call movePiece? TODO
+			movePiece(player, status, sc);
 			movesRemaining--;
-			break;
+			displayBoard(player, status);
 		}
 		return status;
 	}
 
 	/**
 	 * Calls for the player to move the piece.
-	 * 
+	 *
 	 * @param player
 	 * @param status
 	 * @param sc
@@ -233,35 +233,56 @@ public class GameOfCluedo {
 			String input = sc.next();
 			input = input.toLowerCase();
 
+			Suspect suspect = player.getSuspect();
+
 			switch(input){
 
-			case "n": 
-				//move north
-				break;
-			case "s": 
-				//move south
-				break;
-			case "e": 
-				//move east
-				break;
-			case "w": 
-				//move west
-				break;
+			case "n":
+				if(move(suspect,Direction.NORTH)){
+					return;
+				}
+			case "s":
+				if(move(suspect,Direction.SOUTH)){
+					return;
+				}
+			case "e":
+				if(move(suspect,Direction.EAST)){
+					return;
+				}
+			case "w":
+				if(move(suspect,Direction.WEST)){
+					return;
+				}
 			default:
 				System.out.println("Please enter a direction.");
 				System.out.println("\n");
-				continue;  //do not display the board if input is incorrect	
 			}
-			System.out.println("\n");
+		}
+	}
+
+	/**
+	 * Try to move the piece
+	 * @param suspect
+	 * @param north
+	 */
+	private boolean move(Suspect suspect, Direction dir) {
+		System.out.println("moving" + dir);
+		if(board.canMove(suspect, dir))	{
+			board.moveSuspect(suspect, dir);
+			return true;
+		}
+		else {
+			System.out.println("\n You can't move that way!\n");
+			return false;
 		}
 	}
 
 	/**
 	 * Displays the cards for the player.
-	 * 
+	 *
 	 * @param player
 	 * @param status
-	 * @param sc 
+	 * @param sc
 	 */
 	private STATUS displayCards(Player player, STATUS status, Scanner sc) {
 		status = STATUS.SHOW_CARDS;
@@ -451,7 +472,10 @@ public class GameOfCluedo {
 
 		for (int y = 0; y < 27; y++) {
 			result = "";
-			result = result + board.getLine(y, suspect);
+			result = result + board.getLine(y);
+			if (y == suspect.getY())
+				result = result + " <-- ";
+			else
 			result = result + "     ";
 			result = result
 					+ hud.display(y, player,

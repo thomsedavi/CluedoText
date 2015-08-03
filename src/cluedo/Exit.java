@@ -20,6 +20,11 @@ public class Exit implements Tile {
 		active = false;
 	}
 
+	/**
+	 * Displays a blank tile by default, otherwise a suspect if there is one,
+	 * otherwise a room number if the room is occupied by the player making the
+	 * current turn.
+	 */
 	@Override
 	public String getCode() {
 		if (suspect != null) {
@@ -33,7 +38,7 @@ public class Exit implements Tile {
 
 	@Override
 	public boolean canMove(Direction direction) {
-		return suspect == null;
+		return suspect == null; //someone is here, cannot move!
 	}
 
 	@Override

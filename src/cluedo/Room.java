@@ -127,4 +127,8 @@ public class Room extends Card {
 	public Room getTeleport() {
 		return teleport;
 	}
+
+	public boolean hasExit(int exit) {
+		return exits.containsKey(exit);
+	}
 }
