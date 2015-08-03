@@ -13,10 +13,10 @@ public class Hud {
 		START_TURN, SHOW_CARDS, MOVE_PIECE, EXIT_ROOM, CHOOSE_ROOM, CHOOSE_SUSPECT, CHOOSE_WEAPON, REVEAL_CARD, AWAIT_PLAYER;
 	}
 
-	Suspect[] suspects, playerSuspects;
-	Weapon[] weapons;
-	Room[] rooms;
-	GameOfCluedo game;
+	private Suspect[] suspects, playerSuspects;
+	private Weapon[] weapons;
+	private Room[] rooms;
+	private GameOfCluedo game;
 
 	public Hud(Suspect[] playerSuspects, Suspect[] suspects, Weapon[] weapons,
 			Room[] rooms, GameOfCluedo game) {

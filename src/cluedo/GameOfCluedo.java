@@ -136,15 +136,15 @@ public class GameOfCluedo {
 	private STATUS makeAccusation(Player player, STATUS status, Scanner sc) {
 		status = STATUS.CHOOSE_SUSPECT;
 		displayBoard(player, status);
-		Suspect suspect = (Suspect) selectCard(player, sc, SUSPECTS);
+		Suspect suspect = selectCard(player, sc, SUSPECTS);
 
 		status = STATUS.CHOOSE_ROOM;
 		displayBoard(player, status);
-		Room room = (Room) selectCard(player, sc, ROOMS);
+		Room room = selectCard(player, sc, ROOMS);
 
 		status = STATUS.CHOOSE_WEAPON;
 		displayBoard(player, status);
-		Weapon weapon = (Weapon) selectCard(player, sc, WEAPONS);
+		Weapon weapon = selectCard(player, sc, WEAPONS);
 
 		if(deck.checkSolution(suspect, room, weapon)){
 			isWon = true;
@@ -164,7 +164,7 @@ public class GameOfCluedo {
 	 * @param sc
 	 * @return
 	 */
-	private Card selectCard(Player player, Scanner sc, Card[] cards) {
+	private <T> T selectCard(Player player, Scanner sc, T[] cards) {
 		int i = -1;
 		System.out.println("\nPlease select a number:\n");
 		while(true){
@@ -428,9 +428,9 @@ public class GameOfCluedo {
 	 * @return
 	 */
 	private Deck createDeck() {
-		List<Card> weapons = new ArrayList<Card>(Arrays.asList(WEAPONS));
-		List<Card> rooms = new ArrayList<Card>(Arrays.asList(ROOMS));
-		List<Card> suspects = new ArrayList<Card>(Arrays.asList(SUSPECTS));
+		List<Card> weapons = Arrays.asList(WEAPONS);
+		List<Card> rooms = Arrays.asList(ROOMS);
+		List<Card> suspects = Arrays.asList(SUSPECTS);
 
 		return new Deck(weapons, rooms, suspects);
 	}
