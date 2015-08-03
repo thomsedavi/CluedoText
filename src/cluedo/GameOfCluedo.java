@@ -80,7 +80,7 @@ public class GameOfCluedo {
 						return;
 					}
 					players.remove(player);
-				}	
+				}
 			}
 		}
 	}
@@ -105,7 +105,7 @@ public class GameOfCluedo {
 				status = displayCards(player, status, sc);
 				break;
 			case "d": //roll dice and move
-				status = rollAndMove(player, status, sc); 
+				status = rollAndMove(player, status, sc);
 				turnOver = true;
 				break;
 			case "a": //make accusation
@@ -118,7 +118,7 @@ public class GameOfCluedo {
 			default:
 				System.out.println("Try another option.");
 				System.out.println("\n");
-				continue;  //do not display the board if input is incorrect	
+				continue;  //do not display the board if input is incorrect
 			}
 			System.out.println("\n");
 			assert status != null;
@@ -200,7 +200,7 @@ public class GameOfCluedo {
 
 	/**
 	 * Rolls the dice, and the player can choose where to move.
-	 * 
+	 *
 	 * @param player
 	 * @param sc
 	 */
@@ -221,7 +221,7 @@ public class GameOfCluedo {
 
 	/**
 	 * Calls for the player to move the piece.
-	 * 
+	 *
 	 * @param player
 	 * @param status
 	 * @param sc
@@ -234,22 +234,22 @@ public class GameOfCluedo {
 
 			switch(input){
 
-			case "n": 
+			case "n":
 				//move north
 				break;
-			case "s": 
+			case "s":
 				//move south
 				break;
-			case "e": 
+			case "e":
 				//move east
 				break;
-			case "w": 
+			case "w":
 				//move west
 				break;
 			default:
 				System.out.println("Please enter a direction.");
 				System.out.println("\n");
-				continue;  //do not display the board if input is incorrect	
+				continue;  //do not display the board if input is incorrect
 			}
 			System.out.println("\n");
 		}
@@ -257,10 +257,10 @@ public class GameOfCluedo {
 
 	/**
 	 * Displays the cards for the player.
-	 * 
+	 *
 	 * @param player
 	 * @param status
-	 * @param sc 
+	 * @param sc
 	 */
 	private STATUS displayCards(Player player, STATUS status, Scanner sc) {
 		status = STATUS.SHOW_CARDS;
@@ -452,7 +452,10 @@ public class GameOfCluedo {
 
 		for (int y = 0; y < 27; y++) {
 			result = "";
-			result = result + board.getLine(y, suspect);
+			result = result + board.getLine(y);
+			if (y == suspect.getY())
+				result = result + " <-- ";
+			else
 			result = result + "     ";
 			result = result
 					+ hud.display(y, player,

@@ -1,5 +1,10 @@
 package cluedo;
 
+/**
+ * An enum of compass Directions used by the Board in general.
+ * @author Pauline Kelly & David Thomsen
+ *
+ */
 public enum Direction {
 	NORTH, EAST, SOUTH, WEST;
 
