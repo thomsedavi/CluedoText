@@ -79,7 +79,7 @@ public class GameOfCluedo {
 						System.out.println("Everybody loses! ;)");
 						return;
 					}
-					players.remove(player);
+					players.remove(player);  //concurrentModexception
 				}	
 			}
 		}
@@ -114,6 +114,7 @@ public class GameOfCluedo {
 				break;
 			case "t": //try to teleport
 				status = tryToTeleport(player, status);
+				turnOver = true;
 				break;
 			default:
 				System.out.println("Try another option.");
@@ -136,15 +137,15 @@ public class GameOfCluedo {
 	private STATUS makeAccusation(Player player, STATUS status, Scanner sc) {
 		status = STATUS.CHOOSE_SUSPECT;
 		displayBoard(player, status);
-		Suspect suspect = (Suspect) selectCard(player, sc, SUSPECTS);
+		Suspect suspect = selectCard(player, sc, SUSPECTS);
 
 		status = STATUS.CHOOSE_ROOM;
 		displayBoard(player, status);
-		Room room = (Room) selectCard(player, sc, ROOMS);
+		Room room = selectCard(player, sc, ROOMS);
 
 		status = STATUS.CHOOSE_WEAPON;
 		displayBoard(player, status);
-		Weapon weapon = (Weapon) selectCard(player, sc, WEAPONS);
+		Weapon weapon = selectCard(player, sc, WEAPONS);
 
 		if(deck.checkSolution(suspect, room, weapon)){
 			isWon = true;
@@ -164,7 +165,7 @@ public class GameOfCluedo {
 	 * @param sc
 	 * @return
 	 */
-	private Card selectCard(Player player, Scanner sc, Card[] cards) {
+	private <T> T selectCard(Player player, Scanner sc, T[] cards) {
 		int i = -1;
 		System.out.println("\nPlease select a number:\n");
 		while(true){
@@ -288,12 +289,10 @@ public class GameOfCluedo {
 	 * Sets the board up for the players
 	 */
 	private void initialise(Scanner sc) {
-
 		ROOMS[0].addTeleport(ROOMS[5]);
 		ROOMS[5].addTeleport(ROOMS[0]);
 		ROOMS[2].addTeleport(ROOMS[7]);
 		ROOMS[7].addTeleport(ROOMS[2]);
-
 
 		System.out.println("----------------------");
 		System.out.println("| Welcome to Cluedo! |");
@@ -407,9 +406,9 @@ public class GameOfCluedo {
 	 * @return
 	 */
 	private Deck createDeck() {
-		List<Card> weapons = new ArrayList<Card>(Arrays.asList(WEAPONS));
-		List<Card> rooms = new ArrayList<Card>(Arrays.asList(ROOMS));
-		List<Card> suspects = new ArrayList<Card>(Arrays.asList(SUSPECTS));
+		List<Card> weapons = Arrays.asList(WEAPONS);
+		List<Card> rooms = Arrays.asList(ROOMS);
+		List<Card> suspects = Arrays.asList(SUSPECTS);
 
 		return new Deck(weapons, rooms, suspects);
 	}
@@ -420,7 +419,7 @@ public class GameOfCluedo {
 	 * @return The number of players provided by Standard Input.
 	 */
 	private int getNumPlayers(Scanner sc) {
-		for (;;) {
+		while(true) {
 			try {
 				int numPlayers = sc.nextInt();
 

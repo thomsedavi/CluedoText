@@ -8,7 +8,7 @@ package cluedo;
  */
 public class TextTile implements Tile {
 
-	final String text; //Two character code used to decorate the Board
+	public final String text; //Two character code used to decorate the Board
 
 	public TextTile(String text) {
 		this.text = text;

@@ -14,10 +14,6 @@ public class Deck {
 
 	private List<Card> cards;
 	
-	private Suspect solutionSuspect;  //switch these over.
-	private Room solutionRoom;
-	private Weapon solutionWeapon;
-	
 	private Card[] solution = new Card[3];
 
 	public Deck(List<Card> weapons, List<Card> rooms, List<Card> suspects) {
