@@ -151,10 +151,6 @@ public class GameOfCluedo {
 		return 1;
 	}
 
-	//parse integer
-	//board.exitRoom(suspect,int);
-
-
 	/**
 	 * Rolls the dice, and the player can choose where to move.
 	 *
@@ -164,9 +160,6 @@ public class GameOfCluedo {
 	private STATUS rollAndMove(Player player, STATUS status, Scanner sc) {
 		movesRemaining = rollDice();
 		Suspect suspect = player.getSuspect();
-
-		System.out.println("Remaining: " + movesRemaining);
-		System.out.println("\nYou rolled a " + movesRemaining);
 
 		while(movesRemaining > 0){
 
@@ -190,8 +183,9 @@ public class GameOfCluedo {
 
 				movePiece(player, status, sc);
 			}
+			System.out.println("\n");
 			movesRemaining--;
-			displayBoard(player, status);
+			//displayBoard(player, status);
 		}
 		return status;  //TODO - do I want to return here?
 	}
@@ -204,7 +198,7 @@ public class GameOfCluedo {
 	 * @param sc
 	 */
 	private void movePiece(Player player, STATUS status, Scanner sc) {
-		System.out.println("\nYou have " + movesRemaining + " moves remaining.");
+		System.out.println("\n\nYou have " + movesRemaining + " moves remaining.");
 		while(true){
 			String input = getStringInput(sc);
 
@@ -356,13 +350,12 @@ public class GameOfCluedo {
 	 * @param north
 	 */
 	private boolean move(Suspect suspect, Direction dir) {
-		System.out.println("moving" + dir);
 		if(board.canMove(suspect, dir))	{
 			board.moveSuspect(suspect, dir);
 			return true;
 		}
 		else {
-			System.out.println("\n You can't move that way!\n");
+			System.out.println("\nYou can't move that way!");
 			return false;
 		}
 	}
@@ -392,18 +385,18 @@ public class GameOfCluedo {
 	 * @return A random number between 1 and 6 for the player.
 	 */
 	private int rollDice() {
-		Random rand = new Random();
-		while(true){
-			int i = rand.nextInt(6) + 1;
-			if(i != 0){
-				return i;
-			}
-
-			if(i > 6){
-				System.out.println("Dice roll is greater than 6" + i);
-			}
-
-		}
+//		Random rand = new Random();
+//		while(true){
+//			int i = rand.nextInt(6) + 1;
+//			if(i != 0){
+//				return i;
+//			}
+//
+//			if(i > 6){
+//				System.out.println("Dice roll is greater than 6" + i);
+//			}
+//		}
+		return 20;
 	}
 
 	/**
