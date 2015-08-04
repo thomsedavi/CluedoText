@@ -160,7 +160,6 @@ public class GameOfCluedo {
 	 * @return
 	 */
 	private int parseInteger(Scanner sc) {
-
 		return 1;
 	}
 
@@ -204,7 +203,7 @@ public class GameOfCluedo {
 			movesRemaining--;
 			displayBoard(player, status);
 		}
-		return STATUS.START_TURN; // TODO - do I want to return here?
+		return STATUS.START_TURN;
 	}
 
 	/**
@@ -294,7 +293,7 @@ public class GameOfCluedo {
 	 * @param sc
 	 * @return
 	 */
-	private STATUS makeSuggestion(Player player, STATUS status, Scanner sc) {
+	private STATUS makeSuggestion(Player player, STATUS status, Scanner sc) { //TODO
 
 		List <Card> cards = new ArrayList<>();
 
@@ -331,21 +330,31 @@ public class GameOfCluedo {
 				status = STATUS.REVEAL_CARD;  //this skips the player if they don't have suspicion cards
 				displayBoard(p, status);
 
+				String code;	//Get the char code
+				while(true){
+					code = getStringInput(sc);
+					if(deck.checkCodeIsValid(code)){
+						break;
+					}
+				}
+				c = deck.getCardFromCode(code);
+
+				status = STATUS.DISPLAY_CARD;
+				displayBoard(player, status);
+
+				//wait for input (get an e)
+				String input;
+				while(true){
+					input = getStringInput(sc);
+					if(input.equals("e")){
+						break;
+					}
+				}
 				//enter the string of the char code (that displays if its part of it)
 			}
 		}
 
-		//
-		//				String code;
-		//				while(true){
-		//					code = getStringInput(sc);
-		//					if(codeIsValid(code)){
-		//						break;
-		//					}
-		//				}
-		//				cardToBeDisplayed = code;
-		//				c = getCardFromCode(code);
-		//				return;
+
 
 		//System.out.println(p.getName().has);
 		//
