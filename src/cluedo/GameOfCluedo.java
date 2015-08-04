@@ -80,7 +80,7 @@ public class GameOfCluedo {
 						return;
 					}
 					players.remove(player);  //concurrentModexception
-				}	
+				}
 			}
 		}
 	}
@@ -106,10 +106,10 @@ public class GameOfCluedo {
 
 	/**
 	 * Actions that a player can do while they are in a room
-	 * 
+	 *
 	 * @param player
 	 * @param sc
-	 * @return 
+	 * @return
 	 */
 	private boolean finishedRoomActions(Player player, Scanner sc) {
 			STATUS status = STATUS.START_TURN; //TODO- need variation of start turn
@@ -137,7 +137,7 @@ public class GameOfCluedo {
 
 	/**
 	 * Actions that a player can do while they are in a corridor
-	 * 
+	 *
 	 * @param player
 	 * @param sc
 	 * @return
@@ -209,7 +209,7 @@ public class GameOfCluedo {
 
 	/**
 	 * The player makes an suggestion provided that A) they are in a room and B) that their suggestion includes the room they are in.
-	 * 
+	 *
 	 * @param player
 	 * @param status
 	 * @param sc
@@ -219,7 +219,7 @@ public class GameOfCluedo {
 
 		Room room = player.getSuspect().getRoom();  //get the room the player's suspect is in
 
-		//now cycle around the players while the suggestion is made 
+		//now cycle around the players while the suggestion is made
 		Suggestion sg = new Suggestion(players);
 		Card [] weaponAndSuspect = sg.cyclePlayers();
 
@@ -317,7 +317,6 @@ public class GameOfCluedo {
 	 * @param sc
 	 */
 	private void movePiece(Player player, STATUS status, Scanner sc) {
-		System.out.println("\nSelect where to move the piece:\n N for North \n S for South \n E for East \n W for West. \nYou have " + movesRemaining + " moves remaining.");
 		while(true){
 			String input = sc.next();
 			input = input.toLowerCase();
@@ -530,9 +529,12 @@ public class GameOfCluedo {
 	 * @return
 	 */
 	private Deck createDeck() {
-		List<Card> weapons = Arrays.asList(WEAPONS);
-		List<Card> rooms = Arrays.asList(ROOMS);
-		List<Card> suspects = Arrays.asList(SUSPECTS);
+		List<Weapon> weapons = new ArrayList<Weapon>();
+		weapons.addAll(Arrays.asList(WEAPONS));
+		List<Room> rooms = new ArrayList<Room>();
+		rooms.addAll(Arrays.asList(ROOMS));
+		List<Suspect> suspects = new ArrayList<Suspect>();
+		suspects.addAll(Arrays.asList(SUSPECTS));
 
 		return new Deck(weapons, rooms, suspects);
 	}
@@ -570,16 +572,16 @@ public class GameOfCluedo {
 		boolean teleport = board.canTeleport(suspect);
 
 		Room temp = suspect.getRoom();
-		if (temp != null)
+		if (temp != null && movesRemaining > 0)
 			temp.showExits();
 
 		for (int y = 0; y < 27; y++) {
 			result = "";
 			result = result + board.getLine(y);
-			if (y == suspect.getY())
-				result = result + " <-- ";
+			if (y == suspect.getY() && !suspect.isInRoom())
+				result = result + " <-here   ";
 			else
-				result = result + "     ";
+				result = result + "          ";
 			result = result
 					+ hud.display(y, player,
 							status, teleport);
