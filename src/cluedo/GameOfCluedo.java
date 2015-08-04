@@ -38,20 +38,26 @@ public class GameOfCluedo {
 	private Board board;
 	private Deck deck;
 	private Hud hud;
+	String message; // special message to sometimes be displayed at the start of
+					// turns
+
+	private List<Card> cards;
 
 	boolean isWon = false;
 
-	int movesRemaining;
+	public List<Card> getCards() {
+		return cards;
+	}
 
-	private Card[] suggestion;
+	private int movesRemaining;
 
 	private List<Player> players;
 
-	private String CardToBeDisplayed;
+	private Card cardToBeDisplayed;
 
 	public GameOfCluedo() throws InterruptedException {
+		cards = new ArrayList<>();
 		players = new ArrayList<Player>();
-		suggestion = new Card[3];
 		Scanner sc = new Scanner(System.in);
 		initialise(sc);
 		run(sc);
@@ -118,7 +124,7 @@ public class GameOfCluedo {
 
 			displayBoard(player, status);
 
-			System.out.println("\n\nChoose from the displayed actions: \n");
+			// System.out.println("\n\nChoose from the displayed actions: \n");
 			String input = getStringInput(sc);
 
 			switch (input) {
@@ -141,6 +147,10 @@ public class GameOfCluedo {
 				status = tryToTeleport(player, status, sc);
 				turnOver = true;
 				break;
+			case "e": // Player cannot move, time to end it all!
+				if (!board.canPlayTurn(player.getSuspect()))
+					turnOver = true;
+				break;
 			default:
 				System.out.println("Try another option.");
 			}
@@ -156,8 +166,13 @@ public class GameOfCluedo {
 	 * @param sc
 	 * @return
 	 */
-	private int parseInteger(Scanner sc) {
-		return 1;
+	private int parseInteger(Player player, Scanner sc, STATUS status) {
+		while (!sc.hasNextInt()) {
+			message = "Please enter an integer";
+			displayBoard(player, status);
+			sc.next();
+		}
+		return sc.nextInt();
 	}
 
 	/**
@@ -168,6 +183,7 @@ public class GameOfCluedo {
 	 */
 	private STATUS rollAndMove(Player player, STATUS status, Scanner sc) {
 		movesRemaining = rollDice();
+		message = player.getName() + " rolled a " + movesRemaining;
 		Suspect suspect = player.getSuspect();
 
 		while (movesRemaining > 0) {
@@ -180,10 +196,13 @@ public class GameOfCluedo {
 				int i; // get the number of the exit
 
 				while (true) {
-					i = parseInteger(sc);
+					i = parseInteger(player, sc, status);
 					if (board.canUseExit(suspect, i)) {
 						board.exitRoom(suspect, i);
 						break; // Break out of the user input loop
+					} else {
+						message = "Please select a valid exit";
+						displayBoard(player, status);
 					}
 				}
 			} else { // Otherwise you are in the corridor
@@ -211,8 +230,8 @@ public class GameOfCluedo {
 	 * @param sc
 	 */
 	private void movePiece(Player player, STATUS status, Scanner sc) {
-		System.out.println("\n\nYou have " + movesRemaining
-				+ " moves remaining.");
+		// System.out.println("\n\nYou have " + movesRemaining
+		// + " moves remaining.");
 		while (true) {
 			String input = getStringInput(sc);
 
@@ -221,22 +240,22 @@ public class GameOfCluedo {
 			switch (input) {
 
 			case "n":
-				if (move(suspect, Direction.NORTH)) {
+				if (move(player, suspect, Direction.NORTH, status)) {
 					return;
 				}
 				break;
 			case "s":
-				if (move(suspect, Direction.SOUTH)) {
+				if (move(player, suspect, Direction.SOUTH, status)) {
 					return;
 				}
 				break;
 			case "e":
-				if (move(suspect, Direction.EAST)) {
+				if (move(player, suspect, Direction.EAST, status)) {
 					return;
 				}
 				break;
 			case "w":
-				if (move(suspect, Direction.WEST)) {
+				if (move(player, suspect, Direction.WEST, status)) {
 					return;
 				}
 				break;
@@ -291,10 +310,9 @@ public class GameOfCluedo {
 	 * @param sc
 	 * @return
 	 */
-	private STATUS makeSuggestion(Player player, STATUS status, Scanner sc) { //TODO
+	private STATUS makeSuggestion(Player player, STATUS status, Scanner sc) { // TODO
 
-		List<Card> cards = new ArrayList<>();
-
+		cards.clear();
 		cards.add(player.getSuspect().getRoom()); // get the room the player's
 		// suspect is in
 
@@ -303,14 +321,15 @@ public class GameOfCluedo {
 		// Card [] weaponAndSuspect = sg.cyclePlayers();
 
 		status = STATUS.CHOOSE_SUSPECT;
+		message = "In the " + player.getSuspect().getRoom().getName() + "...";
 		displayBoard(player, status);
 		cards.add(selectCard(player, sc, SUSPECTS));
 
 		status = STATUS.CHOOSE_WEAPON;
+		message = cards.get(1) + " in the "
+				+ player.getSuspect().getRoom().getName() + " with...";
 		displayBoard(player, status);
 		cards.add(selectCard(player, sc, WEAPONS));
-
-		Card c;
 
 		// cycle through players
 		for (Player p : players) {
@@ -322,36 +341,49 @@ public class GameOfCluedo {
 				status = STATUS.AWAIT_PLAYER;
 				displayBoard(p, status);
 
-				// get user input here
+				while (true) {
+					String input = sc.next();
+					if (input.equalsIgnoreCase("E")) {
+						break;
+					}
+				}
 
-				// they press enter
 				status = STATUS.REVEAL_CARD; // this skips the player if they
 												// don't have suspicion cards
 				displayBoard(p, status);
 
-				String code;	//Get the char code
-				while(true){
+				String code; // Get the char code
+				while (true) {
 					code = getStringInput(sc);
-					if(deck.checkCodeIsValid(code)){
-						break;
+					if (deck.checkCodeIsValid(code)) {
+						cardToBeDisplayed = deck.getCardFromCode(code);
+						if (cards.contains(cardToBeDisplayed))
+							break;
+						else {
+							message = "Not a valid card!";
+							displayBoard(p, status);
+						}
 					}
 				}
-				c = deck.getCardFromCode(code);
 
 				status = STATUS.DISPLAY_CARD;
-				displayBoard(player, status);
+				displayBoard(p, status);
 
-				//wait for input (get an e)
+				// wait for input (get an e)
 				String input;
-				while(true){
+				while (true) {
 					input = getStringInput(sc);
-					if(input.equals("e")){
+					if (input.equals("e")) {
 						break;
 					}
 				}
-				//enter the string of the char code (that displays if its part of it)
+
+				return status;
+				// enter the string of the char code (that displays if its part
+				// of it)
 			}
 		}
+		message = "No matching cards!";
 		return status;
 
 	}
@@ -406,12 +438,14 @@ public class GameOfCluedo {
 	 * @param suspect
 	 * @param north
 	 */
-	private boolean move(Suspect suspect, Direction dir) {
+	private boolean move(Player player, Suspect suspect, Direction dir,
+			STATUS status) {
 		if (board.canMove(suspect, dir)) {
 			board.moveSuspect(suspect, dir);
 			return true;
 		} else {
-			System.out.println("\nYou can't move that way!");
+			message = "\nYou can't move that way!";
+			displayBoard(player, status);
 			return false;
 		}
 	}
@@ -453,7 +487,7 @@ public class GameOfCluedo {
 		// System.out.println("Dice roll is greater than 6" + i);
 		// }
 		// }
-		return 20;
+		return 19;
 	}
 
 	/**
@@ -486,7 +520,7 @@ public class GameOfCluedo {
 
 		hud = new Hud(suspects, SUSPECTS, WEAPONS, ROOMS, this);
 
-		System.out.println("\nOk, set! Player 1, start.\n");
+		message = "\nOk, set! Player 1, start.\n";
 	}
 
 	/**
@@ -507,7 +541,7 @@ public class GameOfCluedo {
 		for (int i = 0; i < numPlayers; ++i) {
 			String name = enterName(i + 1, sc);
 
-			System.out.println("Player " + (i + 1) + ", pick a suspect:\n");
+			System.out.println("\nPlayer " + (i + 1) + ", pick a suspect:\n");
 			for (int j = 0; j < tempSuspects.size(); ++j) {
 				System.out.println(String.format("%d. %s", j + 1, tempSuspects
 						.get(j).getName()));
@@ -523,8 +557,8 @@ public class GameOfCluedo {
 
 						tempSuspects.remove(selection - 1);
 
-						System.out.print("You have selected "
-								+ selected.getName() + ".\n");
+						System.out.print("\nYou have selected "
+								+ selected.getName() + ".\n\n\n");
 						players.add(new Player(name, selected));
 						selectedSuspects[counter] = selected;
 						counter++;
@@ -554,7 +588,7 @@ public class GameOfCluedo {
 			String input = sc.next();
 
 			while (true) {
-				System.out.println("Is " + input + " the name you want?");
+				System.out.println("\nIs " + input + " the name you want?");
 				String answer = sc.next();
 
 				if (answer.equalsIgnoreCase("Y")) {
@@ -614,21 +648,26 @@ public class GameOfCluedo {
 	}
 
 	private void displayBoard(Player player, STATUS status) {
+
 		String result;
 		Suspect suspect = player.getSuspect();
 		boolean teleport = board.canTeleport(suspect);
 
+		System.out.print("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n" + message
+				+ "\n");
+		message = "";
+
 		Room temp = suspect.getRoom();
-		if (temp != null)
+		if (temp != null && status == STATUS.EXIT_ROOM)
 			temp.showExits();
 
 		for (int y = 0; y < 27; y++) {
 			result = "";
 			result = result + board.getLine(y);
-			if (y == suspect.getY())
-				result = result + " <--   ";
+			if (y == suspect.getY() && !suspect.isInRoom())
+				result = result + " <-here   ";
 			else
-				result = result + "       ";
+				result = result + "          ";
 			result = result + hud.display(y, player, status, teleport);
 			System.out.print(result);
 		}
@@ -639,10 +678,6 @@ public class GameOfCluedo {
 
 	public int movesRemaining() {
 		return movesRemaining;
-	}
-
-	public Card[] getSuggestion() {
-		return suggestion;
 	}
 
 	/**
@@ -659,7 +694,11 @@ public class GameOfCluedo {
 		new GameOfCluedo();
 	}
 
-	public String getCardToBeDisplayed() {
-		return CardToBeDisplayed;
+	public Card getCardToBeDisplayed() {
+		return cardToBeDisplayed;
+	}
+
+	public Board getBoard() {
+		return board;
 	}
 }

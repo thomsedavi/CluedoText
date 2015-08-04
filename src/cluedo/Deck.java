@@ -13,11 +13,13 @@ import java.util.Random;
  */
 public class Deck {
 
-	private List<Card> cards;
+	private List<Card> allCards;
+	private List<Card> dealingCards;
 	private Card[] solution = new Card[3];
 
 	public Deck(List<Weapon> weapons, List<Room> rooms, List<Suspect> suspects) {
-		this.cards = new ArrayList<>();
+		allCards = new ArrayList<Card>();
+		dealingCards = new ArrayList<Card>();
 		getSolution(weapons, rooms, suspects);
 		shuffleCards(weapons, rooms, suspects);
 
@@ -35,10 +37,11 @@ public class Deck {
 	 */
 	public List<Player> dealCards(List<Player> players) {
 		while (true) {
+
 			for (Player p : players) {
-				p.addToHand(cards.remove(0)); // removes the first card, others
+				p.addToHand(dealingCards.remove(0)); // removes the first card, others
 				// slide down
-				if (cards.isEmpty()) {
+				if (dealingCards.isEmpty()) {
 					return players;
 				}
 			}
@@ -75,15 +78,17 @@ public class Deck {
 	public void shuffleCards(List<Weapon> weapons, List<Room> rooms,
 			List<Suspect> suspects) {
 
-		cards.addAll(weapons);
-		cards.addAll(rooms);
-		cards.addAll(suspects);
+		allCards.addAll(weapons);
+		allCards.addAll(rooms);
+		allCards.addAll(suspects);
 
-		cards.remove(solution[0]);
-		cards.remove(solution[1]);
-		cards.remove(solution[2]);
+		dealingCards.addAll(allCards);
 
-		Collections.shuffle(cards);
+		dealingCards.remove(solution[0]);
+		dealingCards.remove(solution[1]);
+		dealingCards.remove(solution[2]);
+
+		Collections.shuffle(dealingCards);
 	}
 
 	public Card[] getSolution() {
@@ -92,14 +97,6 @@ public class Deck {
 
 	public void setSolution(Card[] solution) {
 		this.solution = solution;
-	}
-
-	public List<Card> getCards() {
-		return cards;
-	}
-
-	public void setCards(List<Card> cards) {
-		this.cards = cards;
 	}
 
 	/**
@@ -135,7 +132,13 @@ public class Deck {
 	}
 
 	public Card getCardFromCode(String str) {
+		Card result = null;
 
-		return null;
+		for (Card c : allCards) {
+			if (str.equalsIgnoreCase(c.getCode()))
+				result = c;
+		}
+
+		return result;
 	}
 }

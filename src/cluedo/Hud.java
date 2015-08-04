@@ -1,5 +1,7 @@
 package cluedo;
 
+import java.util.List;
+
 /**
  * This returns lines representing the status of the game based on which line is
  * currently being 'scanned', who the current player is what the STATUS of the
@@ -57,8 +59,21 @@ public class Hud {
 			return revealCard(y, player);
 		case AWAIT_PLAYER:
 			return awaitPlayer(y, player);
+		case DISPLAY_CARD:
+			return displayCard(y, player);
 		}
 		return "";
+	}
+
+	private String displayCard(int y, Player player) {
+		if (y == 0)
+			return player.getName() + " has chosen to display:";
+		else if (y == 2)
+			return "* " + game.getCardToBeDisplayed().toString() + "!";
+		else if (y == 4)
+			return "Press (E) to continue";
+		else
+			return "";
 	}
 
 	/**
@@ -67,9 +82,9 @@ public class Hud {
 	 */
 	private String awaitPlayer(int y, Player player) {
 		if (y == 0)
-			return "Please press Enter when";
+			return player.getName() + " has matching cards...";
 		else if (y == 1)
-			return player.getName() + " is ready...";
+			return "Please press enter (E) when ready";
 		else
 			return "";
 	}
@@ -80,13 +95,16 @@ public class Hud {
 	 * can be selected.
 	 */
 	private String revealCard(int y, Player player) {
-		Card[] suggestion = game.getSuggestion();
+		List<Card> suggestion = game.getCards();
 
-		if (y >= player.getHand().size())
+		if (y == 0)
+			return "Please type a code in (brackets):";
+
+		if (y - 2 >= player.getHand().size() || y - 2 < 0)
 			return "";
 		else {
 
-			Card thisLine = player.getHand().get(y);
+			Card thisLine = player.getHand().get(y - 2);
 
 			for (Card c : suggestion) {
 				if (thisLine.equals(c))
@@ -191,8 +209,10 @@ public class Hud {
 	private String startTurn(int y, Player player, boolean teleport) {
 		Suspect suspect = player.getSuspect();
 
-		if (y == 0)
+		if (y == 0 && !player.getSuspect().isInRoom())
 			return player.getName() + "'s turn!";
+		else if (y == 0 && player.getSuspect().isInRoom())
+			return player.getName() + "'s turn! Currently in the " + player.getSuspect().getRoom().toString();
 		else if (y - 2 < playerSuspects.length && y - 2 >= 0)
 			if (suspect.equals(playerSuspects[y - 2]))
 				return playerSuspects[y - 2].getName() + " ("
@@ -201,20 +221,17 @@ public class Hud {
 				return playerSuspects[y - 2].getName() + " ("
 						+ playerSuspects[y - 2].getCode() + ")";
 		else if (playerSuspects.length + 3 == y)
-			return "Enter 'C' to see your Cards";
-		else if (!teleport)
-			if (playerSuspects.length + 4 == y)
-				return "Enter 'D' to roll the Dice";
-			else if (playerSuspects.length + 5 == y)
-				return "Enter 'A' to make an Accusation";
-			else
-				return "";
-		else if (playerSuspects.length + 4 == y)
-			return "Enter 'D' to roll the Dice";
+			return "Please choose an option:";
 		else if (playerSuspects.length + 5 == y)
-			return "Enter 'T' to Teleport";
+			return "Enter 'C' to see your Cards";
 		else if (playerSuspects.length + 6 == y)
 			return "Enter 'A' to make an Accusation";
+		else if (playerSuspects.length + 7 == y && game.getBoard().canPlayTurn(suspect))
+			return "Enter 'D' to roll the Dice";
+		else if (playerSuspects.length + 7 == y && !game.getBoard().canPlayTurn(suspect))
+			return "Enter 'E' to End turn";
+		else if (playerSuspects.length + 8 == y && teleport)
+			return "Enter 'T' to Teleport";
 		else
 			return "";
 	}
