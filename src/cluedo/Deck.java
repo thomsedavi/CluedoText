@@ -15,7 +15,7 @@ public class Deck {
 	private List<Card> cards;
 	private Card[] solution = new Card[3];
 
-	public Deck(List<Card> weapons, List<Card> rooms, List<Card> suspects) {
+	public Deck(List<Weapon> weapons, List<Room> rooms, List<Suspect> suspects) {
 		this.cards = new ArrayList<>();
 		getSolution(weapons, rooms, suspects);
 		shuffleCards(weapons, rooms, suspects);
@@ -45,7 +45,7 @@ public class Deck {
 	 * @param rooms
 	 * @param suspects
 	 */
-	public void getSolution(List<Card> weapons, List<Card> rooms, List<Card> suspects) {
+	public void getSolution(List<Weapon> weapons, List<Room> rooms, List<Suspect> suspects) {
 		Random rand = new Random();
 		int index;
 
@@ -64,8 +64,8 @@ public class Deck {
 	 *
 	 * @return The List of shuffled cards.
 	 */
-	public void shuffleCards(List<Card> weapons, List<Card> rooms,
-			List<Card> suspects) {
+	public void shuffleCards(List<Weapon> weapons, List<Room> rooms,
+			List<Suspect> suspects) {
 
 		cards.addAll(weapons);
 		cards.addAll(rooms);

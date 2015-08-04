@@ -520,9 +520,12 @@ public class GameOfCluedo {
 	 * @return
 	 */
 	private Deck createDeck() {
-		List<Card> weapons = Arrays.asList(WEAPONS);
-		List<Card> rooms = Arrays.asList(ROOMS);
-		List<Card> suspects = Arrays.asList(SUSPECTS);
+		List<Weapon> weapons = new ArrayList<Weapon>();
+		weapons.addAll(Arrays.asList(WEAPONS));
+		List<Room> rooms = new ArrayList<Room>();
+		rooms.addAll(Arrays.asList(ROOMS));
+		List<Suspect> suspects = new ArrayList<Suspect>();
+		suspects.addAll(Arrays.asList(SUSPECTS));
 
 		return new Deck(weapons, rooms, suspects);
 	}
@@ -567,9 +570,9 @@ public class GameOfCluedo {
 			result = "";
 			result = result + board.getLine(y);
 			if (y == suspect.getY())
-				result = result + " <-- ";
+				result = result + " <--   ";
 			else
-				result = result + "     ";
+				result = result + "       ";
 			result = result
 					+ hud.display(y, player,
 							status, teleport);

@@ -145,13 +145,15 @@ public class Hud {
 					+ player.getSuspect().getCode() + "):";
 		else if (y == 1)
 			return game.movesRemaining() + " moves remaining";
-		else if (y == 3)
-			return "    (N) for NORTH";
+		else if (y == 2)
+			return "Please enter a direction:";
 		else if (y == 4)
-			return "(W) for WEST";
+			return "    (N) for NORTH";
 		else if (y == 5)
-			return "      (E) for EAST";
+			return "(W) for WEST";
 		else if (y == 6)
+			return "      (E) for EAST";
+		else if (y == 7)
 			return "  (S) for SOUTH";
 		else
 			return "";
