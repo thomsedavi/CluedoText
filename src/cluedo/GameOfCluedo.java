@@ -66,23 +66,37 @@ public class GameOfCluedo {
 		while (!isWon) {						//checks if the game has been won
 			for(Player player : players){
 
+				if(noMorePlayers()){			//Checks if there are more players
+					System.out.println("No more players - everybody loses!");
+					return;
+				}
+
 				if(player.isEliminated()){		//Checks if the player was eliminated from the game
 					continue;
 				}
-				displayBoard(player, STATUS.START_TURN);
-				getHudInput(player, sc);
-
-				//If the player has been eliminated, remove them from the list of players now.
-				//If it's the last player, then the game is over.
-				if(player.isEliminated()){
-					if(players.size() == 1){
-						System.out.println("Everybody loses! ;)");
-						return;
-					}
-					players.remove(player);  //concurrentModexception
-				}
+				getHudInput(player, sc);		//Present options to the player
 			}
 		}
+	}
+
+	/**
+	 * Checks if everyone has been eliminated.
+	 * If the number of eliminated players equals the number of players, then everyone is gone.
+	 *
+	 * @return If there's no more play
+	 */
+	private boolean noMorePlayers() {
+		int eliminated = 0;
+		for(Player p : this.players){
+			if(p.isEliminated()){
+				eliminated++;
+			}
+		}
+
+		if(players.size() - eliminated <= 0 ){
+			return true;
+		}
+		return false;
 	}
 
 	/**
@@ -94,85 +108,135 @@ public class GameOfCluedo {
 		boolean turnOver = false;
 
 		while(!turnOver){
-			//player is in room or not
-			if(player.getSuspect().getRoom()==null){
-				turnOver = finishedCorridorActions(player, sc);
-			}
-			else {  //Otherwise the player is in a room
-				turnOver = finishedRoomActions(player,sc);
-			}
-		}
-	}
-
-	/**
-	 * Actions that a player can do while they are in a room
-	 *
-	 * @param player
-	 * @param sc
-	 * @return
-	 */
-	private boolean finishedRoomActions(Player player, Scanner sc) {
-			STATUS status = STATUS.START_TURN; //TODO- need variation of start turn
-			boolean finishedTurn = false;
+			STATUS status = STATUS.START_TURN;  //Shouldn't ever be null. If incorrect input, display the board for the start of their turn.
+			displayBoard(player, status);
 
 			System.out.println("\n\nChoose from the displayed actions: \n");
-			String input = sc.next().toLowerCase();
+			String input = getStringInput(sc);
 
 			switch(input){
 
 			case "c": //see cards
 				status = displayCards(player, status, sc);
 				break;
-			case "s": //see cards
-				// status = makeSuggestion();
+			case "d": //roll dice and move
+				status = rollAndMove(player, status, sc);
+				turnOver = true;
+				break;
+			case "a": //make accusation
+				status = makeAccusation(player, status, sc);
+				turnOver = true;
+				break;
+			case "t": //try to teleport
+				status = tryToTeleport(player, status);
+				turnOver = true;
 				break;
 			default:
 				System.out.println("Try another option.");
 			}
-			System.out.println("\n");
+
+			//System.out.println("\n");
 			assert status != null;
 			displayBoard(player, status);
-			return finishedTurn;
+		}
 	}
 
 	/**
-	 * Actions that a player can do while they are in a corridor
-	 *
-	 * @param player
+	 * Parse an integer from the user
 	 * @param sc
 	 * @return
 	 */
-	private boolean finishedCorridorActions(Player player, Scanner sc) {
-		STATUS status = STATUS.START_TURN;  //Shouldn't ever be null. If incorrect input, display the board for the start of their turn.
-		boolean finishedTurn = false;
+	private int parseInteger(Scanner sc){
 
-		System.out.println("\n\nChoose from the displayed actions: \n");
-		String input = sc.next().toLowerCase();
+		return 1;
+	}
 
-		switch(input){
+	//parse integer
+	//board.exitRoom(suspect,int);
 
-		case "c": //see cards
-			status = displayCards(player, status, sc);
-			break;
-		case "d": //roll dice and move
-			status = rollAndMove(player, status, sc);
-			finishedTurn = true;
-			break;
-		case "a": //make accusation
-			status = makeAccusation(player, status, sc);
-			finishedTurn = true;
-			break;
-		case "t": //try to teleport
-			status = tryToTeleport(player, status);
-			finishedTurn = true;
-			break;
-		default:
-			System.out.println("Try another option.");
+
+	/**
+	 * Rolls the dice, and the player can choose where to move.
+	 *
+	 * @param player
+	 * @param sc
+	 */
+	private STATUS rollAndMove(Player player, STATUS status, Scanner sc) {
+		movesRemaining = rollDice();
+		Suspect suspect = player.getSuspect();
+
+		System.out.println("Remaining: " + movesRemaining);
+		System.out.println("\nYou rolled a " + movesRemaining);
+
+		while(movesRemaining > 0){
+
+			if(suspect.isInRoom()){	//Check if you're in a room - and move out of it
+				status = STATUS.EXIT_ROOM;
+				displayBoard(player, status);
+
+				int i;	//get the number of the exit
+
+				while(true){
+					i = parseInteger(sc);
+					if(board.canUseExit(suspect, i)){
+						board.exitRoom(suspect, i);
+						break;						//Break out of the user input loop
+					}
+				}
+			}
+			else {	//Otherwise you are in the corridor
+				status = STATUS.MOVE_PIECE;
+				displayBoard(player, status);
+
+				movePiece(player, status, sc);
+			}
+			movesRemaining--;
+			displayBoard(player, status);
 		}
-		System.out.println("\n");
-		assert status != null;
-		displayBoard(player, status);
-		return finishedTurn;
+		return status;  //TODO - do I want to return here?
+	}
+
+	/**
+	 * Calls for the player to move the piece.
+	 *
+	 * @param player
+	 * @param status
+	 * @param sc
+	 */
+	private void movePiece(Player player, STATUS status, Scanner sc) {
+		System.out.println("\nYou have " + movesRemaining + " moves remaining.");
+		while(true){
+			String input = getStringInput(sc);
+
+			Suspect suspect = player.getSuspect();
+
+			switch(input){
+
+			case "n":
+				if(move(suspect,Direction.NORTH)){
+					return;
+				}
+				break;
+			case "s":
+				if(move(suspect,Direction.SOUTH)){
+					return;
+				}
+				break;
+			case "e":
+				if(move(suspect,Direction.EAST)){
+					return;
+				}
+				break;
+			case "w":
+				if(move(suspect,Direction.WEST)){
+					return;
+				}
+				break;
+			default:
+				System.out.println("Please enter a direction.");
+				System.out.println("\n");
+			}
+		}
 	}
 
 	/**
@@ -220,8 +284,8 @@ public class GameOfCluedo {
 		Room room = player.getSuspect().getRoom();  //get the room the player's suspect is in
 
 		//now cycle around the players while the suggestion is made
-		Suggestion sg = new Suggestion(players);
-		Card [] weaponAndSuspect = sg.cyclePlayers();
+		//Suggestion sg = new Suggestion(players);
+		//Card [] weaponAndSuspect = sg.cyclePlayers();
 
 		status = STATUS.AWAIT_PLAYER;
 
@@ -284,72 +348,6 @@ public class GameOfCluedo {
 		}
 
 		return status;
-	}
-
-	/**
-	 * Rolls the dice, and the player can choose where to move.
-	 *
-	 * @param player
-	 * @param sc
-	 */
-	private STATUS rollAndMove(Player player, STATUS status, Scanner sc) {
-		System.out.println("/n");
-		status = STATUS.MOVE_PIECE;
-		displayBoard(player, status);
-		movesRemaining = rollDice();
-		System.out.println("Remaining: " + movesRemaining);
-		System.out.println("\nYou rolled a " + movesRemaining);
-
-		while(movesRemaining != 0){
-			movePiece(player, status, sc);
-
-			movesRemaining--;
-			displayBoard(player, status);
-		}
-		return status;
-	}
-
-	/**
-	 * Calls for the player to move the piece.
-	 *
-	 * @param player
-	 * @param status
-	 * @param sc
-	 */
-	private void movePiece(Player player, STATUS status, Scanner sc) {
-		while(true){
-			String input = sc.next();
-			input = input.toLowerCase();
-
-			Suspect suspect = player.getSuspect();
-
-			switch(input){
-
-			case "n":
-				if(move(suspect,Direction.NORTH)){
-					return;
-				}
-				break;
-			case "s":
-				if(move(suspect,Direction.SOUTH)){
-					return;
-				}
-				break;
-			case "e":
-				if(move(suspect,Direction.EAST)){
-					return;
-				}
-				break;
-			case "w":
-				if(move(suspect,Direction.WEST)){
-					return;
-				}
-				break;
-			default:
-				System.out.println("Please enter a direction.");
-				System.out.println("\n");
-			}
-		}
 	}
 
 	/**
@@ -572,16 +570,16 @@ public class GameOfCluedo {
 		boolean teleport = board.canTeleport(suspect);
 
 		Room temp = suspect.getRoom();
-		if (temp != null && movesRemaining > 0)
+		if (temp != null)
 			temp.showExits();
 
 		for (int y = 0; y < 27; y++) {
 			result = "";
 			result = result + board.getLine(y);
-			if (y == suspect.getY() && !suspect.isInRoom())
-				result = result + " <-here   ";
+			if (y == suspect.getY())
+				result = result + " <--   ";
 			else
-				result = result + "          ";
+				result = result + "       ";
 			result = result
 					+ hud.display(y, player,
 							status, teleport);
@@ -598,6 +596,15 @@ public class GameOfCluedo {
 
 	public Card[] getSuggestion() {
 		return suggestion;
+	}
+
+	/**
+	 * Returns a valid string  TODO Check alphabetic char?
+	 * @param sc
+	 * @return
+	 */
+	private String getStringInput(Scanner sc) {
+		return sc.next().toLowerCase();
 	}
 
 	public static void main(String[] args) throws InterruptedException {
