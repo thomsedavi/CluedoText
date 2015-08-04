@@ -111,25 +111,14 @@ public class GameOfCluedo {
 	private void getHudInput(Player player, Scanner sc) {
 		boolean turnOver = false;
 
-<<<<<<< HEAD
-		while(!turnOver){
-			suggestion[0] = WEAPONS[0];
-			suggestion[1] = WEAPONS[2];
-			suggestion[2] = WEAPONS[1];
-			STATUS status = STATUS.REVEAL_CARD;  //Shouldn't ever be null. If incorrect input, display the board for the start of their turn.
-=======
 		while (!turnOver) {
 			STATUS status = STATUS.START_TURN; // Shouldn't ever be null. If
-<<<<<<< HEAD
 			// incorrect input, display the
 			// board for the start of their
 			// turn.
-=======
-												// incorrect input, display the
-												// board for the start of their
-												// turn.
->>>>>>> 91262ab8db83875158ad56e4d93826f617b6ad44
->>>>>>> b9a1f950eae6bddb7dbda320fd73ea35cf3dbc25
+			// incorrect input, display the
+			// board for the start of their
+			// turn.
 			displayBoard(player, status);
 
 			System.out.println("\n\nChoose from the displayed actions: \n");
@@ -346,33 +335,33 @@ public class GameOfCluedo {
 			}
 		}
 
-//
-//				String code;
-//				while(true){
-//					code = getStringInput(sc);
-//					if(codeIsValid(code)){
-//						break;
-//					}
-//				}
-//				cardToBeDisplayed = code;
-//				c = getCardFromCode(code);
-//				return;
+		//
+		//				String code;
+		//				while(true){
+		//					code = getStringInput(sc);
+		//					if(codeIsValid(code)){
+		//						break;
+		//					}
+		//				}
+		//				cardToBeDisplayed = code;
+		//				c = getCardFromCode(code);
+		//				return;
 
-				//System.out.println(p.getName().has);
-//
-//			}
-//		}
-//
-//		status = STATUS.AWAIT_PLAYER;
-//
-//		if (deck.checkSolution(suspect, room, weapon)) {
-//			isWon = true;
-//			System.out.println("You guessed right!");
-//		} else {
-//			System.out.println("You guessed wrong.");
-//			System.out.println(player.getName() + " was eliminated from the game!");
-//			player.eliminate();
-//		}
+		//System.out.println(p.getName().has);
+		//
+		//			}
+		//		}
+		//
+		//		status = STATUS.AWAIT_PLAYER;
+		//
+		//		if (deck.checkSolution(suspect, room, weapon)) {
+		//			isWon = true;
+		//			System.out.println("You guessed right!");
+		//		} else {
+		//			System.out.println("You guessed wrong.");
+		//			System.out.println(player.getName() + " was eliminated from the game!");
+		//			player.eliminate();
+		//		}
 		return status;
 
 	}
