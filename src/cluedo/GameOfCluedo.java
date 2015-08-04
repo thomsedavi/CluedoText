@@ -19,22 +19,23 @@ import cluedo.Hud.STATUS;
 public class GameOfCluedo {
 
 	public static final Suspect[] SUSPECTS = {
-		new Suspect("Miss Scarlett", "mS", 8, 25),
-		new Suspect("Colonel Mustard", "cM", 1, 18),
-		new Suspect("Mrs White", "mW", 10, 1),
-		new Suspect("Rev Green", "rG", 15, 1),
-		new Suspect("Mrs Peacock", "mP", 24, 7),
-		new Suspect("Professor Plum", "pP", 24, 20) };
+			new Suspect("Miss Scarlett", "mS", 8, 25),
+			new Suspect("Colonel Mustard", "cM", 1, 18),
+			new Suspect("Mrs White", "mW", 10, 1),
+			new Suspect("Rev Green", "rG", 15, 1),
+			new Suspect("Mrs Peacock", "mP", 24, 7),
+			new Suspect("Professor Plum", "pP", 24, 20) };
 
 	public static final Weapon[] WEAPONS = { new Weapon("Candlestick", "Cs"),
-		new Weapon("Dagger", "Dg"), new Weapon("Lead Pipe", "Lp"),
-		new Weapon("Revolver", "Rv"), new Weapon("Rope", "Rp"),
-		new Weapon("Spanner", "Sp") };
+			new Weapon("Dagger", "Dg"), new Weapon("Lead Pipe", "Lp"),
+			new Weapon("Revolver", "Rv"), new Weapon("Rope", "Rp"),
+			new Weapon("Spanner", "Sp") };
 
 	public static final Room[] ROOMS = { new Room("Kitchen", "KI"),
-		new Room("Ball Room", "BA"), new Room("Conservatory", "CO"),
-		new Room("Billiard Room", "BI"), new Room("Library", "LI"), new Room("Study", "ST"),
-		new Room("Hall", "HA"), new Room("Lounge", "LO"), new Room("Dining Room", "DR") };
+			new Room("Ball Room", "BA"), new Room("Conservatory", "CO"),
+			new Room("Billiard Room", "BI"), new Room("Library", "LI"),
+			new Room("Study", "ST"), new Room("Hall", "HA"),
+			new Room("Lounge", "LO"), new Room("Dining Room", "DR") };
 
 	private Board board;
 	private Deck deck;
@@ -63,37 +64,38 @@ public class GameOfCluedo {
 	 * @throws InterruptedException
 	 */
 	private void run(Scanner sc) throws InterruptedException {
-		while (!isWon) {						//checks if the game has been won
-			for(Player player : players){
+		while (!isWon) { // checks if the game has been won
+			for (Player player : players) {
 
-				if(noMorePlayers()){			//Checks if there are more players
+				if (noMorePlayers()) { // Checks if there are more players
 					System.out.println("No more players - everybody loses!");
 					return;
 				}
 
-				if(player.isEliminated()){		//Checks if the player was eliminated from the game
+				if (player.isEliminated()) { // Checks if the player was
+												// eliminated from the game
 					continue;
 				}
-				getHudInput(player, sc);		//Present options to the player
+				getHudInput(player, sc); // Present options to the player
 			}
 		}
 	}
 
 	/**
-	 * Checks if everyone has been eliminated.
-	 * If the number of eliminated players equals the number of players, then everyone is gone.
+	 * Checks if everyone has been eliminated. If the number of eliminated
+	 * players equals the number of players, then everyone is gone.
 	 *
 	 * @return If there's no more play
 	 */
 	private boolean noMorePlayers() {
 		int eliminated = 0;
-		for(Player p : this.players){
-			if(p.isEliminated()){
+		for (Player p : this.players) {
+			if (p.isEliminated()) {
 				eliminated++;
 			}
 		}
 
-		if(players.size() - eliminated <= 0 ){
+		if (players.size() - eliminated <= 0) {
 			return true;
 		}
 		return false;
@@ -101,52 +103,59 @@ public class GameOfCluedo {
 
 	/**
 	 * Interacts with the HUD based on player responses.
+	 *
 	 * @param player
 	 * @param sc
 	 */
 	private void getHudInput(Player player, Scanner sc) {
 		boolean turnOver = false;
 
-		while(!turnOver){
-			STATUS status = STATUS.START_TURN;  //Shouldn't ever be null. If incorrect input, display the board for the start of their turn.
+		while (!turnOver) {
+			STATUS status = STATUS.START_TURN; // Shouldn't ever be null. If
+												// incorrect input, display the
+												// board for the start of their
+												// turn.
 			displayBoard(player, status);
 
 			System.out.println("\n\nChoose from the displayed actions: \n");
 			String input = getStringInput(sc);
 
-			switch(input){
+			switch (input) {
 
-			case "c": //see cards
+			case "c": // see cards
 				status = displayCards(player, status, sc);
 				break;
-			case "d": //roll dice and move
+			case "d": // roll dice and move
 				status = rollAndMove(player, status, sc);
 				turnOver = true;
 				break;
-			case "a": //make accusation
+			case "a": // make accusation
 				status = makeAccusation(player, status, sc);
+				if(isWon){
+					return;
+				}
 				turnOver = true;
 				break;
-			case "t": //try to teleport
-				status = tryToTeleport(player, status);
+			case "t": // try to teleport
+				status = tryToTeleport(player, status, sc);
 				turnOver = true;
 				break;
 			default:
 				System.out.println("Try another option.");
 			}
 
-			//System.out.println("\n");
+			// System.out.println("\n");
 			assert status != null;
-			displayBoard(player, status);
 		}
 	}
 
 	/**
 	 * Parse an integer from the user
+	 *
 	 * @param sc
 	 * @return
 	 */
-	private int parseInteger(Scanner sc){
+	private int parseInteger(Scanner sc) {
 
 		return 1;
 	}
@@ -161,33 +170,37 @@ public class GameOfCluedo {
 		movesRemaining = rollDice();
 		Suspect suspect = player.getSuspect();
 
-		while(movesRemaining > 0){
+		while (movesRemaining > 0) {
 
-			if(suspect.isInRoom()){	//Check if you're in a room - and move out of it
+			if (suspect.isInRoom()) { // Check if you're in a room - and move
+										// out of it
 				status = STATUS.EXIT_ROOM;
 				displayBoard(player, status);
 
-				int i;	//get the number of the exit
+				int i; // get the number of the exit
 
-				while(true){
+				while (true) {
 					i = parseInteger(sc);
-					if(board.canUseExit(suspect, i)){
+					if (board.canUseExit(suspect, i)) {
 						board.exitRoom(suspect, i);
-						break;						//Break out of the user input loop
+						break; // Break out of the user input loop
 					}
 				}
-			}
-			else {	//Otherwise you are in the corridor
+			} else { // Otherwise you are in the corridor
 				status = STATUS.MOVE_PIECE;
 				displayBoard(player, status);
 
 				movePiece(player, status, sc);
+				if(suspect.isInRoom()){
+					makeSuggestion(player, status, sc);
+					return STATUS.START_TURN;		//entered room so turn is over.
+				}
 			}
 			System.out.println("\n");
 			movesRemaining--;
-			//displayBoard(player, status);
+			displayBoard(player, status);
 		}
-		return status;  //TODO - do I want to return here?
+		return STATUS.START_TURN; // TODO - do I want to return here?
 	}
 
 	/**
@@ -198,31 +211,32 @@ public class GameOfCluedo {
 	 * @param sc
 	 */
 	private void movePiece(Player player, STATUS status, Scanner sc) {
-		System.out.println("\n\nYou have " + movesRemaining + " moves remaining.");
-		while(true){
+		System.out.println("\n\nYou have " + movesRemaining
+				+ " moves remaining.");
+		while (true) {
 			String input = getStringInput(sc);
 
 			Suspect suspect = player.getSuspect();
 
-			switch(input){
+			switch (input) {
 
 			case "n":
-				if(move(suspect,Direction.NORTH)){
+				if (move(suspect, Direction.NORTH)) {
 					return;
 				}
 				break;
 			case "s":
-				if(move(suspect,Direction.SOUTH)){
+				if (move(suspect, Direction.SOUTH)) {
 					return;
 				}
 				break;
 			case "e":
-				if(move(suspect,Direction.EAST)){
+				if (move(suspect, Direction.EAST)) {
 					return;
 				}
 				break;
 			case "w":
-				if(move(suspect,Direction.WEST)){
+				if (move(suspect, Direction.WEST)) {
 					return;
 				}
 				break;
@@ -235,6 +249,7 @@ public class GameOfCluedo {
 
 	/**
 	 * The player makes an accusation.
+	 *
 	 * @param player
 	 * @param status
 	 * @param sc
@@ -253,20 +268,22 @@ public class GameOfCluedo {
 		displayBoard(player, status);
 		Weapon weapon = selectCard(player, sc, WEAPONS);
 
-		if(deck.checkSolution(suspect, room, weapon)){
+		if (deck.checkSolution(suspect, room, weapon)) {
 			isWon = true;
 			System.out.println("You guessed right!");
-		}
-		else {
+			return status;
+		} else {
 			System.out.println("You guessed wrong :(");
+			status = STATUS.START_TURN;
 			player.eliminate();
 		}
-		status = STATUS.START_TURN;
+
 		return status;
 	}
 
 	/**
-	 * The player makes an suggestion provided that A) they are in a room and B) that their suggestion includes the room they are in.
+	 * The player makes an suggestion provided that A) they are in a room and B)
+	 * that their suggestion includes the room they are in.
 	 *
 	 * @param player
 	 * @param status
@@ -275,11 +292,12 @@ public class GameOfCluedo {
 	 */
 	private STATUS makeSuggestion(Player player, STATUS status, Scanner sc) {
 
-		Room room = player.getSuspect().getRoom();  //get the room the player's suspect is in
+		Room room = player.getSuspect().getRoom(); // get the room the player's
+													// suspect is in
 
-		//now cycle around the players while the suggestion is made
-		//Suggestion sg = new Suggestion(players);
-		//Card [] weaponAndSuspect = sg.cyclePlayers();
+		// now cycle around the players while the suggestion is made
+		// Suggestion sg = new Suggestion(players);
+		// Card [] weaponAndSuspect = sg.cyclePlayers();
 
 		status = STATUS.AWAIT_PLAYER;
 
@@ -291,21 +309,21 @@ public class GameOfCluedo {
 		displayBoard(player, status);
 		Weapon weapon = selectCard(player, sc, WEAPONS);
 
-		if(deck.checkSolution(suspect, room, weapon)){
+		if (deck.checkSolution(suspect, room, weapon)) {
 			isWon = true;
 			System.out.println("You guessed right!");
-		}
-		else {
-			System.out.println("You guessed wrong :(");
+		} else {
+			System.out.println("You guessed wrong.");
+			System.out.println(player.getName() + " was eliminated from the game!");
 			player.eliminate();
 		}
-
 
 		return status;
 	}
 
 	/**
 	 * Selects the weapon for the character to guess.
+	 *
 	 * @param player
 	 * @param sc
 	 * @return
@@ -313,10 +331,10 @@ public class GameOfCluedo {
 	private <T> T selectCard(Player player, Scanner sc, T[] cards) {
 		int i = -1;
 		System.out.println("\nPlease select a number:\n");
-		while(true){
+		while (true) {
 			try {
 				i = sc.nextInt() - 1;
-				if(i >= 0 && i < cards.length){
+				if (i >= 0 && i < cards.length) {
 					return cards[i];
 				}
 				System.out.println("Number must be within bounds!");
@@ -328,16 +346,19 @@ public class GameOfCluedo {
 	}
 
 	/**
-	 * Checks if the player can teleport or not. If not, returns standard menu for player turn.
+	 * Checks if the player can teleport or not. If not, returns standard menu
+	 * for player turn.
+	 *
 	 * @param player
 	 * @return
 	 */
-	private STATUS tryToTeleport(Player player, STATUS status) {
+	private STATUS tryToTeleport(Player player, STATUS status, Scanner sc) {
 		Suspect playerSuspect = player.getSuspect();
 		boolean canTeleport = board.canTeleport(playerSuspect);
 
-		if(canTeleport){
+		if (canTeleport) {
 			board.teleport(playerSuspect);
+			makeSuggestion(player, status, sc);
 			status = STATUS.CHOOSE_ROOM;
 		}
 
@@ -346,15 +367,15 @@ public class GameOfCluedo {
 
 	/**
 	 * Try to move the piece
+	 *
 	 * @param suspect
 	 * @param north
 	 */
 	private boolean move(Suspect suspect, Direction dir) {
-		if(board.canMove(suspect, dir))	{
+		if (board.canMove(suspect, dir)) {
 			board.moveSuspect(suspect, dir);
 			return true;
-		}
-		else {
+		} else {
 			System.out.println("\nYou can't move that way!");
 			return false;
 		}
@@ -371,10 +392,11 @@ public class GameOfCluedo {
 		status = STATUS.SHOW_CARDS;
 		displayBoard(player, status);
 
-		while(true){
+		while (true) {
 			String input = sc.next();
-			if(input.equalsIgnoreCase("E")){
-				return STATUS.START_TURN;  //Returns the player to their main menu
+			if (input.equalsIgnoreCase("E")) {
+				return STATUS.START_TURN; // Returns the player to their main
+											// menu
 			}
 		}
 	}
@@ -385,17 +407,17 @@ public class GameOfCluedo {
 	 * @return A random number between 1 and 6 for the player.
 	 */
 	private int rollDice() {
-//		Random rand = new Random();
-//		while(true){
-//			int i = rand.nextInt(6) + 1;
-//			if(i != 0){
-//				return i;
-//			}
-//
-//			if(i > 6){
-//				System.out.println("Dice roll is greater than 6" + i);
-//			}
-//		}
+		// Random rand = new Random();
+		// while(true){
+		// int i = rand.nextInt(6) + 1;
+		// if(i != 0){
+		// return i;
+		// }
+		//
+		// if(i > 6){
+		// System.out.println("Dice roll is greater than 6" + i);
+		// }
+		// }
 		return 20;
 	}
 
@@ -473,7 +495,8 @@ public class GameOfCluedo {
 						counter++;
 						break; // break the loop, ready for the next player
 					} else {
-						System.out.println("That number wasn't an option.\n Please try again:");
+						System.out
+								.println("That number wasn't an option.\n Please try again:");
 						continue;
 					}
 				} catch (InputMismatchException e) {
@@ -491,21 +514,19 @@ public class GameOfCluedo {
 	 * @return The name of the player
 	 */
 	private String enterName(int i, Scanner sc) {
-		while(true){
+		while (true) {
 			System.out.println("Player " + i + ", please enter your name:");
 			String input = sc.next();
 
-			while(true){
-				System.out.println("Is " + input +" the name you want?");
+			while (true) {
+				System.out.println("Is " + input + " the name you want?");
 				String answer = sc.next();
 
-				if(answer.equalsIgnoreCase("Y")){
+				if (answer.equalsIgnoreCase("Y")) {
 					return input;
-				}
-				else if(answer.equalsIgnoreCase("N")){
+				} else if (answer.equalsIgnoreCase("N")) {
 					break;
-				}
-				else {
+				} else {
 					System.out.println("Please enter Y or N:");
 					continue;
 				}
@@ -536,19 +557,19 @@ public class GameOfCluedo {
 	 * @return The number of players provided by Standard Input.
 	 */
 	private int getNumPlayers(Scanner sc) {
-		while(true) {
+		while (true) {
 			try {
 				int numPlayers = sc.nextInt();
 
-				return numPlayers;	//for testing ONLY. TODO
-				//				if (numPlayers > 2 && numPlayers < 7) {
-				//					return numPlayers;
-				//				} else {
-				//					System.out
-				//					.println("The number of players must be between 3 and 6(inclusive).\n Please try again:");
-				//					sc.next();
-				//					continue;
-				//				}
+				return numPlayers; // for testing ONLY. TODO
+				// if (numPlayers > 2 && numPlayers < 7) {
+				// return numPlayers;
+				// } else {
+				// System.out
+				// .println("The number of players must be between 3 and 6(inclusive).\n Please try again:");
+				// sc.next();
+				// continue;
+				// }
 			} catch (InputMismatchException e) {
 				System.out.println("Please enter an integer:");
 				sc.next();
@@ -573,9 +594,7 @@ public class GameOfCluedo {
 				result = result + " <--   ";
 			else
 				result = result + "       ";
-			result = result
-					+ hud.display(y, player,
-							status, teleport);
+			result = result + hud.display(y, player, status, teleport);
 			System.out.print(result);
 		}
 
@@ -592,7 +611,8 @@ public class GameOfCluedo {
 	}
 
 	/**
-	 * Returns a valid string  TODO Check alphabetic char?
+	 * Returns a valid string TODO Check alphabetic char?
+	 *
 	 * @param sc
 	 * @return
 	 */

@@ -19,6 +19,12 @@ public class Deck {
 		this.cards = new ArrayList<>();
 		getSolution(weapons, rooms, suspects);
 		shuffleCards(weapons, rooms, suspects);
+
+		System.out.print("Solution is: ");
+		for(Card c : solution){
+			System.out.print(c + " ");
+		}
+		System.out.println("\n");
 	}
 
 	/**
@@ -103,8 +109,8 @@ public class Deck {
 	 * @return Whether all the Cards match
 	 */
 	public boolean checkSolution(Suspect suspect, Room room, Weapon weapon) {
-		System.out.println("S:" + solution[0] + "R:" + solution[1] + "W" + solution[2]);
-		System.out.println("S:" + suspect + "R:" + room + "W" + weapon);
+		//System.out.println("S:" + solution[0] + "R:" + solution[1] + "W" + solution[2]);
+		//System.out.println("S:" + suspect + "R:" + room + "W" + weapon);
 
 		if(suspect.equals(solution[0]) &&
 				room.equals(solution[1]) &&

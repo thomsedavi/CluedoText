@@ -20,6 +20,7 @@ public class Player {
 	private boolean eliminated = false; // whether the character has been
 										// eliminated from the game after a
 										// false Accusation
+	private boolean winner = false;
 
 	public Player(String name, Suspect selected) {
 		this.name = name;
@@ -69,6 +70,10 @@ public class Player {
 
 	public boolean isEliminated() {
 		return this.eliminated;
+	}
+
+	public void isWinner() {
+		this.winner  = true;
 	}
 
 }
