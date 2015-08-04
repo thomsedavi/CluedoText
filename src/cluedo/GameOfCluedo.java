@@ -19,23 +19,23 @@ import cluedo.Hud.STATUS;
 public class GameOfCluedo {
 
 	public static final Suspect[] SUSPECTS = {
-		new Suspect("Miss Scarlett", "mS", 8, 25),
-		new Suspect("Colonel Mustard", "cM", 1, 18),
-		new Suspect("Mrs White", "mW", 10, 1),
-		new Suspect("Rev Green", "rG", 15, 1),
-		new Suspect("Mrs Peacock", "mP", 24, 7),
-		new Suspect("Professor Plum", "pP", 24, 20) };
+			new Suspect("Miss Scarlett", "mS", 8, 25),
+			new Suspect("Colonel Mustard", "cM", 1, 18),
+			new Suspect("Mrs White", "mW", 10, 1),
+			new Suspect("Rev Green", "rG", 15, 1),
+			new Suspect("Mrs Peacock", "mP", 24, 7),
+			new Suspect("Professor Plum", "pP", 24, 20) };
 
 	public static final Weapon[] WEAPONS = { new Weapon("Candlestick", "Cs"),
-		new Weapon("Dagger", "Dg"), new Weapon("Lead Pipe", "Lp"),
-		new Weapon("Revolver", "Rv"), new Weapon("Rope", "Rp"),
-		new Weapon("Spanner", "Sp") };
+			new Weapon("Dagger", "Dg"), new Weapon("Lead Pipe", "Lp"),
+			new Weapon("Revolver", "Rv"), new Weapon("Rope", "Rp"),
+			new Weapon("Spanner", "Sp") };
 
 	public static final Room[] ROOMS = { new Room("Kitchen", "KI"),
-		new Room("Ball Room", "BA"), new Room("Conservatory", "CO"),
-		new Room("Billiard Room", "BI"), new Room("Library", "LI"),
-		new Room("Study", "ST"), new Room("Hall", "HA"),
-		new Room("Lounge", "LO"), new Room("Dining Room", "DR") };
+			new Room("Ball Room", "BA"), new Room("Conservatory", "CO"),
+			new Room("Billiard Room", "BI"), new Room("Library", "LI"),
+			new Room("Study", "ST"), new Room("Hall", "HA"),
+			new Room("Lounge", "LO"), new Room("Dining Room", "DR") };
 
 	private Board board;
 	private Deck deck;
@@ -74,7 +74,8 @@ public class GameOfCluedo {
 					return;
 				}
 
-				if (player.isEliminated()) { // Checks if the player was eliminated from the game
+				if (player.isEliminated()) { // Checks if the player was
+												// eliminated from the game
 					continue;
 				}
 				getHudInput(player, sc); // Present options to the player
@@ -111,25 +112,11 @@ public class GameOfCluedo {
 	private void getHudInput(Player player, Scanner sc) {
 		boolean turnOver = false;
 
-<<<<<<< HEAD
-		while(!turnOver){
-			suggestion[0] = WEAPONS[0];
-			suggestion[1] = WEAPONS[2];
-			suggestion[2] = WEAPONS[1];
-			STATUS status = STATUS.REVEAL_CARD;  //Shouldn't ever be null. If incorrect input, display the board for the start of their turn.
-=======
 		while (!turnOver) {
 			STATUS status = STATUS.START_TURN; // Shouldn't ever be null. If
-<<<<<<< HEAD
-			// incorrect input, display the
-			// board for the start of their
-			// turn.
-=======
 												// incorrect input, display the
 												// board for the start of their
 												// turn.
->>>>>>> 91262ab8db83875158ad56e4d93826f617b6ad44
->>>>>>> b9a1f950eae6bddb7dbda320fd73ea35cf3dbc25
 			displayBoard(player, status);
 
 			System.out.println("\n\nChoose from the displayed actions: \n");
@@ -146,7 +133,7 @@ public class GameOfCluedo {
 				break;
 			case "a": // make accusation
 				status = makeAccusation(player, status, sc);
-				if(isWon){
+				if (isWon) {
 					return;
 				}
 				turnOver = true;
@@ -206,9 +193,9 @@ public class GameOfCluedo {
 				displayBoard(player, status);
 
 				movePiece(player, status, sc);
-				if(suspect.isInRoom()){
+				if (suspect.isInRoom()) {
 					makeSuggestion(player, status, sc);
-					return STATUS.START_TURN;		//entered room so turn is over.
+					return STATUS.START_TURN; // entered room so turn is over.
 				}
 			}
 			System.out.println("\n");
@@ -289,7 +276,8 @@ public class GameOfCluedo {
 			return status;
 		} else {
 			System.out.println("You guessed wrong :(");
-			System.out.println(player.getName() + " was eliminated from the game!");
+			System.out.println(player.getName()
+					+ " was eliminated from the game!");
 			status = STATUS.START_TURN;
 			player.eliminate();
 		}
@@ -307,7 +295,7 @@ public class GameOfCluedo {
 	 */
 	private STATUS makeSuggestion(Player player, STATUS status, Scanner sc) {
 
-		List <Card> cards = new ArrayList<>();
+		List<Card> cards = new ArrayList<>();
 
 		cards.add(player.getSuspect().getRoom()); // get the room the player's
 		// suspect is in
@@ -326,53 +314,56 @@ public class GameOfCluedo {
 
 		Card c;
 
-		//cycle through players
-		for(Player p : players){
-			if(p.equals(player)){
+		// cycle through players
+		for (Player p : players) {
+			if (p.equals(player)) {
 				continue;
 			}
-			//cards
-			if(p.qtyMatching(cards) > 0){
+			// cards
+			if (p.qtyMatching(cards) > 0) {
 				status = STATUS.AWAIT_PLAYER;
 				displayBoard(p, status);
 
-				//get user input here
+				// get user input here
 
-				//they press enter
-				status = STATUS.REVEAL_CARD;  //this skips the player if they don't have suspicion cards
+				// they press enter
+				status = STATUS.REVEAL_CARD; // this skips the player if they
+												// don't have suspicion cards
 				displayBoard(p, status);
 
-				//enter the string of the char code (that displays if its part of it)
+				// enter the string of the char code (that displays if its part
+				// of it)
 			}
 		}
 
-//
-//				String code;
-//				while(true){
-//					code = getStringInput(sc);
-//					if(codeIsValid(code)){
-//						break;
-//					}
-//				}
-//				cardToBeDisplayed = code;
-//				c = getCardFromCode(code);
-//				return;
+		//
+		// String code;
+		// while(true){
+		// code = getStringInput(sc);
+		// if(codeIsValid(code)){
+		// break;
+		// }
+		// }
+		// cardToBeDisplayed = code;
+		// c = getCardFromCode(code);
+		// return;
 
-				//System.out.println(p.getName().has);
-//
-//			}
-//		}
-//
-//		status = STATUS.AWAIT_PLAYER;
-//
-//		if (deck.checkSolution(suspect, room, weapon)) {
-//			isWon = true;
-//			System.out.println("You guessed right!");
-//		} else {
-//			System.out.println("You guessed wrong.");
-//			System.out.println(player.getName() + " was eliminated from the game!");
-//			player.eliminate();
-//		}
+		// System.out.println(p.getName().has);
+		//
+		// }
+		// }
+		//
+		// status = STATUS.AWAIT_PLAYER;
+		//
+		// if (deck.checkSolution(suspect, room, weapon)) {
+		// isWon = true;
+		// System.out.println("You guessed right!");
+		// } else {
+		// System.out.println("You guessed wrong.");
+		// System.out.println(player.getName() +
+		// " was eliminated from the game!");
+		// player.eliminate();
+		// }
 		return status;
 
 	}
@@ -552,7 +543,7 @@ public class GameOfCluedo {
 						break; // break the loop, ready for the next player
 					} else {
 						System.out
-						.println("That number wasn't an option.\n Please try again:");
+								.println("That number wasn't an option.\n Please try again:");
 						continue;
 					}
 				} catch (InputMismatchException e) {
