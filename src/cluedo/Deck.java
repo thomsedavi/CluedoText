@@ -20,6 +20,12 @@ public class Deck {
 		this.cards = new ArrayList<>();
 		getSolution(weapons, rooms, suspects);
 		shuffleCards(weapons, rooms, suspects);
+
+		System.out.print("Solution is: ");
+		for(Card c : solution){
+			System.out.print(c + " ");
+		}
+		System.out.println("\n");
 	}
 
 	/**
