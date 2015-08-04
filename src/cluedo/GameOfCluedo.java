@@ -117,6 +117,7 @@ public class GameOfCluedo {
 												// incorrect input, display the
 												// board for the start of their
 												// turn.
+
 			displayBoard(player, status);
 
 			System.out.println("\n\nChoose from the displayed actions: \n");
@@ -337,33 +338,32 @@ public class GameOfCluedo {
 		}
 
 		//
-		// String code;
-		// while(true){
-		// code = getStringInput(sc);
-		// if(codeIsValid(code)){
-		// break;
-		// }
-		// }
-		// cardToBeDisplayed = code;
-		// c = getCardFromCode(code);
-		// return;
+		//				String code;
+		//				while(true){
+		//					code = getStringInput(sc);
+		//					if(codeIsValid(code)){
+		//						break;
+		//					}
+		//				}
+		//				cardToBeDisplayed = code;
+		//				c = getCardFromCode(code);
+		//				return;
 
-		// System.out.println(p.getName().has);
+		//System.out.println(p.getName().has);
 		//
-		// }
-		// }
+		//			}
+		//		}
 		//
-		// status = STATUS.AWAIT_PLAYER;
+		//		status = STATUS.AWAIT_PLAYER;
 		//
-		// if (deck.checkSolution(suspect, room, weapon)) {
-		// isWon = true;
-		// System.out.println("You guessed right!");
-		// } else {
-		// System.out.println("You guessed wrong.");
-		// System.out.println(player.getName() +
-		// " was eliminated from the game!");
-		// player.eliminate();
-		// }
+		//		if (deck.checkSolution(suspect, room, weapon)) {
+		//			isWon = true;
+		//			System.out.println("You guessed right!");
+		//		} else {
+		//			System.out.println("You guessed wrong.");
+		//			System.out.println(player.getName() + " was eliminated from the game!");
+		//			player.eliminate();
+		//		}
 		return status;
 
 	}
