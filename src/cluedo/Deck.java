@@ -7,6 +7,7 @@ import java.util.Random;
 
 /**
  * Contains the deck of cards.
+ *
  * @author Pauline Kelly
  *
  */
@@ -45,7 +46,8 @@ public class Deck {
 	 * @param rooms
 	 * @param suspects
 	 */
-	public void getSolution(List<Weapon> weapons, List<Room> rooms, List<Suspect> suspects) {
+	public void getSolution(List<Weapon> weapons, List<Room> rooms,
+			List<Suspect> suspects) {
 		Random rand = new Random();
 		int index;
 
@@ -97,20 +99,37 @@ public class Deck {
 	/**
 	 * Checks the solution against the suggestion or the accusation.
 	 *
-	 * @param suspect The suspect to check
-	 * @param room The room to check
-	 * @param weapon The weapon to check
+	 * @param suspect
+	 *            The suspect to check
+	 * @param room
+	 *            The room to check
+	 * @param weapon
+	 *            The weapon to check
 	 * @return Whether all the Cards match
 	 */
 	public boolean checkSolution(Suspect suspect, Room room, Weapon weapon) {
-		System.out.println("S:" + solution[0] + "R:" + solution[1] + "W" + solution[2]);
+		System.out.println("S:" + solution[0] + "R:" + solution[1] + "W"
+				+ solution[2]);
 		System.out.println("S:" + suspect + "R:" + room + "W" + weapon);
 
-		if(suspect.equals(solution[0]) &&
-				room.equals(solution[1]) &&
-				weapon.equals(solution[2])){
+		if (suspect.equals(solution[0]) && room.equals(solution[1])
+				&& weapon.equals(solution[2])) {
 			return true;
 		}
 		return false;
+	}
+
+	public boolean checkCodeIsValid(String str) {
+		Card result = getCardFromCode(str);
+		if (result != null)
+			return true;
+		else
+			return false;
+
+	}
+
+	public Card getCardFromCode(String str) {
+
+		return null;
 	}
 }

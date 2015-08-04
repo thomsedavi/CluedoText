@@ -108,7 +108,10 @@ public class GameOfCluedo {
 		boolean turnOver = false;
 
 		while(!turnOver){
-			STATUS status = STATUS.START_TURN;  //Shouldn't ever be null. If incorrect input, display the board for the start of their turn.
+			suggestion[0] = WEAPONS[0];
+			suggestion[1] = WEAPONS[2];
+			suggestion[2] = WEAPONS[1];
+			STATUS status = STATUS.REVEAL_CARD;  //Shouldn't ever be null. If incorrect input, display the board for the start of their turn.
 			displayBoard(player, status);
 
 			System.out.println("\n\nChoose from the displayed actions: \n");
