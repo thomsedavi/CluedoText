@@ -55,7 +55,7 @@ public class Player {
 	 *            Suggested by opponent
 	 * @return quantity of matching cards in this Player's Hand
 	 */
-	public int qtyMatching(Card[] cards) {
+	public int qtyMatching(List<Card> cards) {
 		int result = 0;
 		for (Card c : cards) {
 			if (hand.contains(c))
