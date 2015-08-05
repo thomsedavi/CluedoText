@@ -6,8 +6,9 @@ package cluedo;
  */
 public class Suspect extends Card {
 
+	private boolean isPresent = false;
 	private Room room; //Room the suspect is currently in, null if not in a room.
-	private int x, y; //coordinates on Board
+	private Integer x, y; //coordinates on Board
 
 	public Suspect(String name, String code, int x, int y) {
 		super.name = name;
@@ -47,5 +48,13 @@ public class Suspect extends Card {
 
 	public boolean isInRoom() {
 		return room != null;
+	}
+
+	public boolean isPresent() {
+		return isPresent;
+	}
+
+	public void makePresent() {
+		isPresent = true;
 	}
 }
