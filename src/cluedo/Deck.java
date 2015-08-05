@@ -8,7 +8,7 @@ import java.util.Random;
 /**
  * Contains the deck of cards.
  *
- * @author Pauline Kelly
+ * @author David Thomsen & Pauline Kelly
  *
  */
 public class Deck {
@@ -17,6 +17,12 @@ public class Deck {
 	private List<Card> dealingCards;
 	private Card[] solution = new Card[3];
 
+	/**
+	 * Upon creation, the Deck sorts out the Solution to the game, and shuffles the remaining cards.
+	 * @param weapons Weapon cards
+	 * @param rooms Room cards
+	 * @param suspects Suspect cards
+	 */
 	public Deck(List<Weapon> weapons, List<Room> rooms, List<Suspect> suspects) {
 		allCards = new ArrayList<Card>();
 		dealingCards = new ArrayList<Card>();
@@ -31,7 +37,7 @@ public class Deck {
 	}
 
 	/**
-	 * Deals the cards out to the players
+	 * Deals the cards out to the players.
 	 *
 	 * @param players
 	 */
@@ -51,9 +57,9 @@ public class Deck {
 	/**
 	 * Pick out the 3 cards from each of the Weapons, Rooms and Suspect cards.
 	 *
-	 * @param weapons
-	 * @param rooms
-	 * @param suspects
+	 * @param weapons Weapon cards
+	 * @param rooms Room cards
+	 * @param suspects Suspect cards
 	 */
 	public void getSolution(List<Weapon> weapons, List<Room> rooms,
 			List<Suspect> suspects) {
@@ -122,8 +128,14 @@ public class Deck {
 		return false;
 	}
 
-	public boolean checkCodeIsValid(String str) {
-		Card result = getCardFromCode(str);
+	/**
+	 * Checks if the code matches an existing Card.
+	 *
+	 * @param code The code to be matched.
+	 * @return Whether the code matches a Card
+	 */
+	public boolean checkCodeIsValid(String code) {
+		Card result = getCardFromCode(code);
 		if (result != null)
 			return true;
 		else
@@ -131,11 +143,17 @@ public class Deck {
 
 	}
 
-	public Card getCardFromCode(String str) {
+	/**
+	 * Gets the Card from the code.
+	 *
+	 * @param code The code to match to a Card
+	 * @return The Card that matches the code (null if no match)
+	 */
+	public Card getCardFromCode(String code) {
 		Card result = null;
 
 		for (Card c : allCards) {
-			if (str.equalsIgnoreCase(c.getCode()))
+			if (code.equalsIgnoreCase(c.getCode()))
 				result = c;
 		}
 

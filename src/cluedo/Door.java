@@ -56,7 +56,7 @@ public class Door implements Tile {
 	}
 
 	/**
-	 * Can you come from this direction into the room?
+	 * Whether you can come from this direction into the room.
 	 *
 	 * @return Whether the player is able to move in a certain direction.
 	 */
@@ -76,16 +76,17 @@ public class Door implements Tile {
 
 	/**
 	 * Once the player has used the Door, they will then be set up at the next
-	 * specified position in the room.
+	 * specified position in the Room.
 	 */
 	public void setSuspect(Suspect suspect) {
 		room.addSuspect(suspect);
 		suspect.setRoom(room);
 	}
 
-	@Override
+	/**
+	 * Removes the suspect from the Tile.
+	 */
 	public void removeSuspect(Suspect suspect) {
 		room.removeSuspect(suspect);
-
 	}
 }

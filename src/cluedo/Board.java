@@ -11,9 +11,8 @@ import java.util.List;
 
 /**
  * Representing a Board of Cluedo, containing a grid of 26x27 Tiles and a
- * reference to all of the Rooms on the board. All functionality involving the
- * moving of pieces around the board and checking whether they can move is done
- * through this class.
+ * reference to all of the Rooms on the board. All functionality involving piece movement around the
+ * board and checking whether they can move, is done through this class.
  *
  * @author Pauline Kelly & David Thomsen
  */
@@ -77,7 +76,9 @@ public class Board {
 	}
 
 	/**
-	 * creates an individual Tile element based a string read from a file.
+	 * Creates an individual Tile element based a string that was read in from a file.
+	 * Depending on the length of the string read in, it will create a different Tile
+	 * for the board.
 	 */
 	private void parseTile(String string, int x, int y) {
 		switch (string) {
@@ -129,10 +130,10 @@ public class Board {
 	}
 
 	/**
-	 * returns true if a suspect is available to move in a particular Direction
+	 * Returns true if a suspect is available to move in a particular Direction.
+	 * @return Whether the suspect can move in that direction.
 	 */
 	public boolean canMove(Suspect suspect, Direction direction) {
-
 		if (suspect.getRoom() != null)
 			return false; // if they are in a room, cannot move except to leave
 							// the room
@@ -153,7 +154,7 @@ public class Board {
 	}
 
 	/**
-	 * returns a scanned horizontal line of the Board.
+	 * Returns a scanned horizontal line of the Board.
 	 */
 	public String getLine(int y) {
 		String result = "";
@@ -165,10 +166,9 @@ public class Board {
 	}
 
 	/**
-	 * Moves a player around the board according to a compass Direction. Should
-	 * always check first whether the player can actually move in that direction
-	 * before attempting to Move ther.e
-	 *
+	 * Moves a player around the board according to a traditional compass Direction. It should
+	 * always check first whether the player can actually move in that direction before
+	 * attempting to move there.
 	 */
 	public void moveSuspect(Suspect suspect, Direction direction) {
 		int x = suspect.getX();
@@ -196,8 +196,8 @@ public class Board {
 	}
 
 	/**
-	 * move a weapon from one room to another when a Player requests it. Weapons
-	 * are pretty ornamental.
+	 * Move a weapon from one room to another when a Player requests it. Weapons
+	 * are ornamental.
 	 */
 	public void moveWeapon(Weapon weapon, Room room) {
 		weapon.getRoom().removeWeapon(weapon);
@@ -216,7 +216,7 @@ public class Board {
 	}
 
 	/**
-	 * use the Teleport to get to a room on the opposite side of the Baord.
+	 * Use the Teleport to get to a Room on the opposite side of the Board.
 	 */
 	public void teleport(Suspect suspect) {
 		Room thisRoom = suspect.getRoom();
@@ -253,6 +253,7 @@ public class Board {
 	/**
 	 * Checks whether a particular exit number is available for a Suspect to
 	 * exit a room from.
+	 * @return Whether the number corresponds to a valid exit.
 	 */
 	public boolean canUseExit(Suspect suspect, int exit) {
 		Room tempRoom = suspect.getRoom();
@@ -270,10 +271,10 @@ public class Board {
 	}
 
 	/**
-	 * @param suspect
-	 *            the Suspect being moved
-	 * @param exit
-	 *            the number of Exit they are using
+	 * Moves the suspect out of the room, and into a corridor.
+	 *
+	 * @param suspect The Suspect being moved
+	 * @param exit The number of Exit they are using
 	 */
 	public void exitRoom(Suspect suspect, int exit) {
 		Room tempRoom = suspect.getRoom();
@@ -295,7 +296,6 @@ public class Board {
 	/**
 	 * Used for Testing to move pieces around the board quickly.
 	 */
-
 	public void cheatMove(Suspect suspect, int newX, int newY) {
 		int oldX = suspect.getX();
 		int oldY = suspect.getY();
@@ -304,10 +304,22 @@ public class Board {
 		suspect.setLocation(newX, newY);
 	}
 
+	/**
+	 * Removes the suspect from the Board.
+	 * @param s Suspect
+	 * @param x Position X on the Board
+	 * @param y Position Y on the Board
+	 */
 	public void eliminateSuspect(Suspect s, int x, int y) {
 		tiles[x][y].removeSuspect(s);
 	}
 
+	/**
+	 * Moves the Suspect to the Room, for Accusations. (Essentially teleports them to the Room).
+	 *
+	 * @param suspect Suspect to move to the room
+	 * @param room Room to move the Suspect to
+	 */
 	public void moveSuspectToRoom(Suspect suspect, Room room) {
 		if (suspect.isPresent()) {
 			if (suspect.isInRoom()) {

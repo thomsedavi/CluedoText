@@ -60,7 +60,7 @@ public class GameOfCluedo {
 					// MOVE_PIECE will show the amount of movements remaining
 					// and the compass directions.
 
-	boolean isWon = false; // game will play until true
+	boolean isWon = false;
 
 	public List<Card> getCards() {
 		return cards;

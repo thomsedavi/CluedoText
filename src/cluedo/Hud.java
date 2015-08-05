@@ -67,6 +67,12 @@ public class Hud {
 		return "";
 	}
 
+	/**
+	 * Which player has won the game, and the winning suggestion/accusation.
+	 * @param y Horizontal line being scanned
+	 * @param player The player that has won.
+	 * @return The
+	 */
 	private String winGame(int y, Player player) {
 		if (y == 0)
 			return player.getName() + " has won the game!";

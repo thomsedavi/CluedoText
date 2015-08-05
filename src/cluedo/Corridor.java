@@ -1,7 +1,8 @@
 package cluedo;
 
 /**
- * Corridors can contain suspects - suspect may or may not be null.
+ * Corridors are one way of moving between Rooms.
+ * Every Corridor is initially set to null.
  *
  * @author David Thomsen & Pauline Kelly
  *
@@ -25,9 +26,9 @@ public class Corridor implements Tile {
 			return "  ";
 	}
 
-	//TODO
 	/**
-	 * Whether the suspect can move in a certain direction.
+	 * If there is no suspect on this tile, then someone else can move here.
+	 * Direction is not used for this particular tile.
 	 */
 	public boolean canMove(Direction direction) {
 		return suspect == null;
@@ -45,7 +46,9 @@ public class Corridor implements Tile {
 			throw new InvalidMoveError("Suspect cannot move onto this tile");
 	}
 
-	@Override
+	/**
+	 * Removes the suspect from this Tile.
+	 */
 	public void removeSuspect(Suspect suspect) {
 		this.suspect = null;
 	}
