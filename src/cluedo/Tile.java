@@ -13,7 +13,7 @@ public interface Tile {
 	abstract String getCode();
 
 	/**
-	 * @param direction the Suspect is appraoching from
+	 * @param direction the Suspect is approaching from
 	 * @return whether the Suspect can move into this tile from given direction
 	 */
 	abstract boolean canMove(Direction direction);		//Non-Movable Element?

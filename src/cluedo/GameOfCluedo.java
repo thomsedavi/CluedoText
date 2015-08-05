@@ -60,7 +60,7 @@ public class GameOfCluedo {
 					// MOVE_PIECE will show the amount of movements remaining
 					// and the compass directions.
 
-	boolean isWon = false; // game will play until true
+	boolean isWon = false;
 
 	public List<Card> getCards() {
 		return cards;
@@ -335,6 +335,7 @@ public class GameOfCluedo {
 		cards.add(weapon);
 
 		if (deck.checkSolution(suspect, room, weapon)) {
+			System.out.println("Winner");
 			status = STATUS.WIN_GAME;
 			displayBoard(player);
 			isWon = true;
@@ -356,8 +357,10 @@ public class GameOfCluedo {
 	 * @param player
 	 * @param sc
 	 * @return
+	 *
+	 * 021 025 39424
 	 */
-	private STATUS makeSuggestion(Player player, Scanner sc) { // TODO
+	private STATUS makeSuggestion(Player player, Scanner sc) {
 
 		cards.clear();
 		Room room = player.getSuspect().getRoom();
@@ -384,6 +387,7 @@ public class GameOfCluedo {
 														// player and loops
 														// around back to
 														// current player.
+		thisPlayer %= players.size();
 		Player p = players.get(thisPlayer);
 
 		do {

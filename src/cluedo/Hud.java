@@ -67,6 +67,12 @@ public class Hud {
 		return "";
 	}
 
+	/**
+	 * Which player has won the game, and the winning suggestion/accusation.
+	 * @param y Horizontal line being scanned
+	 * @param player The player that has won.
+	 * @return The
+	 */
 	private String winGame(int y, Player player) {
 		if (y == 0)
 			return player.getName() + " has won the game!";
@@ -100,8 +106,10 @@ public class Hud {
 	private String awaitPlayer(int y, Player player) {
 		if (y == 0)
 			return player.getName() + " has matching cards...";
-		else if (y == 1)
-			return "Enter any key when ready";
+		else if (y == 2)
+			return "Enter any key when other players";
+		else if (y == 3)
+			return "are not viewing the screen";
 		else
 			return "";
 	}
@@ -242,7 +250,7 @@ public class Hud {
 		else if (playerSuspects.length + 3 == y)
 			return "Please choose an option:";
 		else if (playerSuspects.length + 5 == y)
-			return "Enter 'C' to see your Cards";
+			return "Enter 'C' to see your Cards after others turn away";
 		else if (playerSuspects.length + 6 == y)
 			return "Enter 'A' to make an Accusation";
 		else if (playerSuspects.length + 7 == y && game.getBoard().canPlayTurn(suspect))
@@ -254,5 +262,4 @@ public class Hud {
 		else
 			return "";
 	}
-
 }

@@ -25,7 +25,6 @@ public class Exit implements Tile {
 	 * otherwise a room number if the room is occupied by the player making the
 	 * current turn.
 	 */
-	@Override
 	public String getCode() {
 		if (suspect != null) {
 			return suspect.getCode();
@@ -36,7 +35,9 @@ public class Exit implements Tile {
 			return "  ";
 	}
 
-	@Override
+	/**
+	 * If a Suspect is occupying this space, you can't move.
+	 */
 	public boolean canMove(Direction direction) {
 		return suspect == null; //someone is here, cannot move!
 	}
@@ -51,10 +52,16 @@ public class Exit implements Tile {
 			throw new InvalidMoveError("Suspect cannot move onto this tile");
 	}
 
+	/**
+	 * If the player is in the room, and wishes to exit, it will display differently on the Board.
+	 */
 	public void activate() {
 		active = true; // will draw exit number when called
 	}
 
+	/**
+	 * If the player is not in the room, it will display differently on the Board.
+	 */
 	public void deactivate() {
 		active = false; // will draw floor when called
 	}
@@ -67,7 +74,9 @@ public class Exit implements Tile {
 		return y;
 	}
 
-	@Override
+	/**
+	 * Removes the Suspect from this Tile.
+	 */
 	public void removeSuspect(Suspect suspect) {
 		this.suspect = null;
 	}
