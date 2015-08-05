@@ -17,29 +17,29 @@ import cluedo.Hud.STATUS;
 public class GameOfCluedo {
 
 	public static final Suspect[] SUSPECTS = {
-			new Suspect("Miss Scarlett", "mS", 8, 25),
-			new Suspect("Colonel Mustard", "cM", 1, 18),
-			new Suspect("Mrs White", "mW", 10, 1),
-			new Suspect("Rev Green", "rG", 15, 1),
-			new Suspect("Mrs Peacock", "mP", 24, 7),
-			new Suspect("Professor Plum", "pP", 24, 20) };
+		new Suspect("Miss Scarlett", "mS", 8, 25),
+		new Suspect("Colonel Mustard", "cM", 1, 18),
+		new Suspect("Mrs White", "mW", 10, 1),
+		new Suspect("Rev Green", "rG", 15, 1),
+		new Suspect("Mrs Peacock", "mP", 24, 7),
+		new Suspect("Professor Plum", "pP", 24, 20) };
 
 	public static final Weapon[] WEAPONS = { new Weapon("Candlestick", "Cs"),
-			new Weapon("Dagger", "Dg"), new Weapon("Lead Pipe", "Lp"),
-			new Weapon("Revolver", "Rv"), new Weapon("Rope", "Rp"),
-			new Weapon("Spanner", "Sp") };
+		new Weapon("Dagger", "Dg"), new Weapon("Lead Pipe", "Lp"),
+		new Weapon("Revolver", "Rv"), new Weapon("Rope", "Rp"),
+		new Weapon("Spanner", "Sp") };
 
 	public static final Room[] ROOMS = { new Room("Kitchen", "KI"),
-			new Room("Ball Room", "BA"), new Room("Conservatory", "CO"),
-			new Room("Billiard Room", "BI"), new Room("Library", "LI"),
-			new Room("Study", "ST"), new Room("Hall", "HA"),
-			new Room("Lounge", "LO"), new Room("Dining Room", "DR") };
+		new Room("Ball Room", "BA"), new Room("Conservatory", "CO"),
+		new Room("Billiard Room", "BI"), new Room("Library", "LI"),
+		new Room("Study", "ST"), new Room("Hall", "HA"),
+		new Room("Lounge", "LO"), new Room("Dining Room", "DR") };
 
 	private Board board;
 	private Deck deck;
 	private Hud hud;
 	String message; // special message to sometimes be displayed at the start of
-					// turns
+	// turns
 
 	private List<Card> cards;
 
@@ -87,7 +87,7 @@ public class GameOfCluedo {
 				}
 
 				if (player.isEliminated()) { // Checks if the player was
-										// eliminated from the game
+					// eliminated from the game
 					continue;
 				}
 				getHudInput(player, sc); // Present options to the player
@@ -126,9 +126,9 @@ public class GameOfCluedo {
 
 		while (!turnOver) {
 			STATUS status = STATUS.START_TURN; // Shouldn't ever be null. If
-												// incorrect input, display the
-												// board for the start of their
-												// turn.
+			// incorrect input, display the
+			// board for the start of their
+			// turn.
 
 			displayBoard(player, status);
 
@@ -357,7 +357,7 @@ public class GameOfCluedo {
 				}
 
 				status = STATUS.REVEAL_CARD; // this skips the player if they
-												// don't have suspicion cards
+				// don't have suspicion cards
 				displayBoard(p, status);
 
 				String code; // Get the char code
@@ -573,7 +573,7 @@ public class GameOfCluedo {
 						break; // break the loop, ready for the next player
 					} else {
 						System.out
-								.println("That number wasn't an option.\n Please try again:");
+						.println("That number wasn't an option.\n Please try again:");
 					}
 				} catch (InputMismatchException e) {
 					System.out.println("Please enter an integer:");
@@ -633,23 +633,23 @@ public class GameOfCluedo {
 	 * @return The number of players provided by Standard Input.
 	 */
 	private int getNumPlayers(Scanner sc) {
+		int numPlayers;
 		while (true) {
 			try {
-				int numPlayers = sc.nextInt(); inputCounter++;
+				String input = sc.next();  inputCounter++;  //Ignores any letters
+				System.out.println("input: " + input);
 
-				return numPlayers; // for testing ONLY. TODO
-				// if (numPlayers > 2 && numPlayers < 7) {
-				// return numPlayers;
-				// } else {
-				// System.out
-				// .println("The number of players must be between 3 and 6(inclusive).\n Please try again:");
-				// sc.next();
-				// continue;
-				// }
-			} catch (InputMismatchException e) {
+				numPlayers = Integer.parseInt(input);
+
+				if (numPlayers > 2 && numPlayers < 7) {
+					return numPlayers;
+				} else {
+					System.out
+					.println("The number of players must be between 3 and 6 (inclusive).\n Please try again:");
+					continue;
+				}
+			} catch (NumberFormatException e) {
 				System.out.println("Please enter an integer:");
-				sc.next();
-				continue;
 			}
 		}
 	}
