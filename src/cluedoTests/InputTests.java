@@ -19,29 +19,19 @@ import cluedo.Weapon;
 
 /**
  * Tests that user input on the board is correct
- * @author kellypaul1
+ * @author Pauline Kelly
  *
  */
 public class InputTests {
 
 	public static final Suspect[] SUSPECTS = {
-		new Suspect("Miss Scarlett", "mS", 8, 25),
-		new Suspect("Colonel Mustard", "cM", 1, 18),
-		new Suspect("Mrs White", "mW", 10, 1),
-		new Suspect("Rev Green", "rG", 15, 1),
-		new Suspect("Mrs Peacock", "mP", 24, 7),
-		new Suspect("Professor Plum", "pP", 24, 20) };
+		new Suspect("Miss Scarlett", "mS", 8, 25)};
 
-	public static final Weapon[] WEAPONS = { new Weapon("Candlestick", "Cs"),
-		new Weapon("Dagger", "Dg"), new Weapon("Lead Pipe", "Lp"),
-		new Weapon("Revolver", "Rv"), new Weapon("Rope", "Rp"),
-		new Weapon("Spanner", "Sp") };
+	public static final Weapon[] WEAPONS = {
+		new Weapon("Candlestick", "Cs")};
 
-	public static final Room[] ROOMS = { new Room("Kitchen", "KI"),
-		new Room("Ball Room", "BA"), new Room("Conservatory", "CO"),
-		new Room("Billiard Room", "BI"), new Room("Library", "LI"),
-		new Room("Study", "ST"), new Room("Hall", "HA"),
-		new Room("Lounge", "LO"), new Room("Dining Room", "DR") };
+	public static final Room[] ROOMS = {
+		new Room("Kitchen", "KI")};
 
 	//Create a list of dummy players and cards
 	private List<Player> players = new ArrayList<Player>();
@@ -73,7 +63,7 @@ public class InputTests {
 		GameOfCluedo game = new GameOfCluedo(players,cards);
 		sc = new Scanner(new File("TestingFiles/0playerInitialisation.txt"));
 		game.initialise(sc);
-		assertNotEquals(10, game.inputCounter);  //Addition input used in error handling
+		assertNotEquals(10, game.inputCounter);  //Additional input used in error handling
 	}
 
 	@Test
@@ -81,7 +71,7 @@ public class InputTests {
 		GameOfCluedo game = new GameOfCluedo(players,cards);
 		sc = new Scanner(new File("TestingFiles/7playerInitialisation.txt"));
 		game.initialise(sc);
-		assertNotEquals(10, game.inputCounter);  //Addition input used in error handling
+		assertNotEquals(10, game.inputCounter);  //Additional input used in error handling
 	}
 
 	@Test
@@ -89,17 +79,8 @@ public class InputTests {
 		GameOfCluedo game = new GameOfCluedo(players,cards);
 		sc = new Scanner(new File("TestingFiles/QplayerInitialisation.txt"));
 		game.initialise(sc);
-		assertNotEquals(10, game.inputCounter);  //Addition input used in error handling
+		assertNotEquals(10, game.inputCounter);  //Additional input used in error handling
 	}
-
-	//	@Test
-	//	public void tryInitialiseWith3Players() throws InterruptedException, FileNotFoundException{
-	//		GameOfCluedo game = new GameOfCluedo(players,cards);
-	//		Scanner sc = new Scanner(new File("3playerInitialisation.txt"));
-	//
-	//		game.initialise(sc);  //reads in initialisation file
-	//		assertEquals(3,game.getPlayers().size());
-	//	}
 }
 
 

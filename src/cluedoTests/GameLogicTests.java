@@ -4,13 +4,10 @@ import static org.junit.Assert.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
-
 import org.junit.*;
 
 import cluedo.Board;
 import cluedo.Card;
-import cluedo.Direction;
 import cluedo.GameOfCluedo;
 import cluedo.Hud;
 import cluedo.Player;
@@ -81,6 +78,16 @@ public class GameLogicTests {
 		}
 
 		assertTrue(game.noMorePlayers());
+	}
+
+	@Test
+	public void checkDiceRolls() throws InterruptedException{
+		GameOfCluedo game = new GameOfCluedo(players,cards);
+		for(int i = 0; i < 200; ++i){
+			int num = game.rollDice();
+			assertTrue(num != 0 && num < 7);
+		}
+
 	}
 
 
