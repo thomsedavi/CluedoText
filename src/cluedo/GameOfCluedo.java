@@ -64,6 +64,12 @@ public class GameOfCluedo {
 		System.out.println("Game Over!");
 	}
 
+	//TEST CONSTRUCTOR
+	public GameOfCluedo(List<Player> players, List<Card> cards) throws InterruptedException {
+		this.players = players;
+		this.cards = cards;
+	}
+
 	/**
 	 * Main game loop.
 	 *
@@ -79,7 +85,7 @@ public class GameOfCluedo {
 				}
 
 				if (player.isEliminated()) { // Checks if the player was
-												// eliminated from the game
+										// eliminated from the game
 					continue;
 				}
 				getHudInput(player, sc); // Present options to the player
@@ -93,7 +99,7 @@ public class GameOfCluedo {
 	 *
 	 * @return If there's no more play
 	 */
-	private boolean noMorePlayers() {
+	public boolean noMorePlayers() {
 		int eliminated = 0;
 		for (Player p : this.players) {
 			if (p.isEliminated()) {
@@ -113,7 +119,7 @@ public class GameOfCluedo {
 	 * @param player
 	 * @param sc
 	 */
-	private void getHudInput(Player player, Scanner sc) {
+	public void getHudInput(Player player, Scanner sc) {
 		boolean turnOver = false;
 
 		while (!turnOver) {
@@ -493,7 +499,7 @@ public class GameOfCluedo {
 	/**
 	 * Sets the board up for the players
 	 */
-	private void initialise(Scanner sc) {
+	public void initialise(Scanner sc) {
 		ROOMS[0].addTeleport(ROOMS[5]);
 		ROOMS[5].addTeleport(ROOMS[0]);
 		ROOMS[2].addTeleport(ROOMS[7]);
@@ -700,5 +706,9 @@ public class GameOfCluedo {
 
 	public Board getBoard() {
 		return board;
+	}
+
+	public List<Player> getPlayers() {
+		return this.players;
 	}
 }
