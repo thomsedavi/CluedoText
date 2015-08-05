@@ -101,7 +101,7 @@ public class Hud {
 		if (y == 0)
 			return player.getName() + " has matching cards...";
 		else if (y == 1)
-			return "Please press enter (E) when ready";
+			return "Please press enter any key when ready";
 		else
 			return "";
 	}
@@ -212,7 +212,7 @@ public class Hud {
 		if (y == 0)
 			return player.getName() + "'s Cards:";
 		else if (y == 3 + player.getHand().size())
-			return "Press E to return to main screen";
+			return "Enter any key to return to main screen";
 		else if (y - 2 < player.getHand().size() && y - 2 >= 0)
 			return player.getHand().get(y - 2).toString();
 		else
