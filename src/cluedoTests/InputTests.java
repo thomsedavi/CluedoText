@@ -81,8 +81,13 @@ public class InputTests {
 	}
 
 	@Test
-	public void tryInitialiseWith6Players() throws InterruptedException, FileNotFoundException{
+	public void countInput() throws InterruptedException, FileNotFoundException{
+		GameOfCluedo game = new GameOfCluedo(players,cards);
+		Scanner sc = new Scanner(new File("3playerInitialisation.txt"));
 
+		game.initialise(sc);  //reads in initialisation file
+
+		assertEquals(10,game.inputCounter);  //1 for numPlayers, 3 names * 3 players
 	}
 
 	@Test
