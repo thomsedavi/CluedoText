@@ -307,4 +307,16 @@ public class Board {
 	public void eliminateSuspect(Suspect s, int x, int y) {
 		tiles[x][y].removeSuspect(s);
 	}
+
+	public void moveSuspectToRoom(Suspect suspect, Room room) {
+		if (suspect.isPresent()) {
+			if (suspect.isInRoom()) {
+				suspect.getRoom().removeSuspect(suspect);
+			} else {
+				tiles[suspect.getX()][suspect.getY()].removeSuspect(suspect);
+			}
+			suspect.setRoom(room);
+			room.addSuspect(suspect);
+		}
+	}
 }

@@ -5,56 +5,75 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.InputMismatchException;
 import java.util.List;
+import java.util.Random;
 import java.util.Scanner;
 
 import cluedo.Hud.STATUS;
 
 /**
+ * Represents a game of Cluedo with a Board, a Deck and all of the Players.
+ * Keeps track of the general status of game, including whose turn it is and how
+ * many dice roll movements are remaining. Takes input from the user and parses
+ * it into actions performed on the Board. Passes movement input from the user
+ * onto the Board to confirm whether particular actions can be performed.
+ * Contains lists of all the Suspects, Weapons and Rooms used in the game. Ends
+ * once all Players have been eliminated or a correct Accusation has been made.
  *
  * @author David Thomsen & Pauline Kelly
  *
  */
 public class GameOfCluedo {
 
+	/**
+	 * All Suspects, Weapons and Rooms have a name and a 2-digit code for
+	 * representing the position on the board. Suspects have an additional X and
+	 * Y coordinate representing their starting position.
+	 */
 	public static final Suspect[] SUSPECTS = {
-		new Suspect("Miss Scarlett", "mS", 8, 25),
-		new Suspect("Colonel Mustard", "cM", 1, 18),
-		new Suspect("Mrs White", "mW", 10, 1),
-		new Suspect("Rev Green", "rG", 15, 1),
-		new Suspect("Mrs Peacock", "mP", 24, 7),
-		new Suspect("Professor Plum", "pP", 24, 20) };
+			new Suspect("Miss Scarlett", "mS", 8, 25),
+			new Suspect("Colonel Mustard", "cM", 1, 18),
+			new Suspect("Mrs White", "mW", 10, 1),
+			new Suspect("Rev Green", "rG", 15, 1),
+			new Suspect("Mrs Peacock", "mP", 24, 7),
+			new Suspect("Professor Plum", "pP", 24, 20) };
 
 	public static final Weapon[] WEAPONS = { new Weapon("Candlestick", "Cs"),
-		new Weapon("Dagger", "Dg"), new Weapon("Lead Pipe", "Lp"),
-		new Weapon("Revolver", "Rv"), new Weapon("Rope", "Rp"),
-		new Weapon("Spanner", "Sp") };
+			new Weapon("Dagger", "Dg"), new Weapon("Lead Pipe", "Lp"),
+			new Weapon("Revolver", "Rv"), new Weapon("Rope", "Rp"),
+			new Weapon("Spanner", "Sp") };
 
 	public static final Room[] ROOMS = { new Room("Kitchen", "KI"),
-		new Room("Ball Room", "BA"), new Room("Conservatory", "CO"),
-		new Room("Billiard Room", "BI"), new Room("Library", "LI"),
-		new Room("Study", "ST"), new Room("Hall", "HA"),
-		new Room("Lounge", "LO"), new Room("Dining Room", "DR") };
+			new Room("Ball Room", "BA"), new Room("Conservatory", "CO"),
+			new Room("Billiard Room", "BI"), new Room("Library", "LI"),
+			new Room("Study", "ST"), new Room("Hall", "HA"),
+			new Room("Lounge", "LO"), new Room("Dining Room", "DR") };
 
 	private Board board;
 	private Deck deck;
-	private Hud hud;
+	private Hud hud; // Heads-Up Display
 	String message; // special message to sometimes be displayed at the start of
 	// turns
 
 	private List<Card> cards;
-	STATUS status;
+	STATUS status; // Passed into the Hud, which will display a different screen
+					// depending on what state the game is in. For example,
+					// MOVE_PIECE will show the amount of movements remaining
+					// and the compass directions.
 
-	boolean isWon = false;
+	boolean isWon = false; // game will play until true
 
 	public List<Card> getCards() {
 		return cards;
 	}
 
-	private int movesRemaining;
+	private int movesRemaining; // set to a dice roll then decremented with each
+								// movement
 
 	private List<Player> players;
 
-	private Card cardToBeDisplayed;
+	private Card cardToBeDisplayed; // The card to displayed when one player
+									// makes a Suggestion and other player has
+									// to reveal a particular card.
 
 	public int inputCounter = 0; // FOR TESTING ONLY - COUNTS THE NUMBER OF
 									// TIMES INPUT IS REQUIRED
@@ -80,10 +99,16 @@ public class GameOfCluedo {
 	 * @throws InterruptedException
 	 */
 	private void run(Scanner sc) throws InterruptedException {
-		while (!isWon) { // checks if the game has been won
+		while (!isWon) {
 			for (Player player : players) {
 
-				if (noMorePlayers()) { // Checks if there are more players
+				if (playersRemaining() == 1) { // Checks if there are more players
+					for (Player winner : players) {
+						if (!winner.isEliminated())
+							status = STATUS.WIN_GAME;
+							displayBoard(winner);
+							return;
+					}
 					System.out.println("No more players - everybody loses!");
 					return;
 				}
@@ -103,18 +128,14 @@ public class GameOfCluedo {
 	 *
 	 * @return If there's no more play
 	 */
-	public boolean noMorePlayers() {
-		int eliminated = 0;
+	public int playersRemaining() {
+		int playersRemaining = 0;
 		for (Player p : this.players) {
-			if (p.isEliminated()) {
-				eliminated++;
+			if (!p.isEliminated()) {
+				playersRemaining++;
 			}
 		}
-
-		if (players.size() - eliminated <= 0) {
-			return true;
-		}
-		return false;
+		return playersRemaining;
 	}
 
 	/**
@@ -135,7 +156,6 @@ public class GameOfCluedo {
 
 			displayBoard(player);
 
-			// System.out.println("\n\nChoose from the displayed actions: \n");
 			String input = getStringInput(sc);
 			inputCounter++;
 
@@ -336,7 +356,8 @@ public class GameOfCluedo {
 	private STATUS makeSuggestion(Player player, Scanner sc) { // TODO
 
 		cards.clear();
-		cards.add(player.getSuspect().getRoom()); // get the room the player's
+		Room room = player.getSuspect().getRoom();
+		cards.add(room); // get the room the player's
 		// suspect is in
 
 		// now cycle around the players while the suggestion is made
@@ -346,13 +367,17 @@ public class GameOfCluedo {
 		status = STATUS.CHOOSE_SUSPECT;
 		message = "In the " + player.getSuspect().getRoom().getName() + "...";
 		displayBoard(player);
-		cards.add(selectCard(player, sc, SUSPECTS));
+		Suspect suspect = selectCard(player, sc, SUSPECTS);
+		board.moveSuspectToRoom(suspect, room);
+		cards.add(suspect);
 
 		status = STATUS.CHOOSE_WEAPON;
 		message = cards.get(1) + " in the "
 				+ player.getSuspect().getRoom().getName() + " with...";
 		displayBoard(player);
-		cards.add(selectCard(player, sc, WEAPONS));
+		Weapon weapon = selectCard(player, sc, WEAPONS);
+		board.moveWeapon(weapon, room);
+		cards.add(weapon);
 
 		// cycle through players
 		for (Player p : players) {
@@ -364,7 +389,8 @@ public class GameOfCluedo {
 				status = STATUS.AWAIT_PLAYER;
 				displayBoard(p);
 
-				while (!sc.hasNext());
+				while (!sc.hasNext())
+					;
 				sc.next();
 
 				status = STATUS.REVEAL_CARD; // this skips the player if they
@@ -394,13 +420,9 @@ public class GameOfCluedo {
 				displayBoard(p);
 
 				// wait for input (get an e)
-				String input;
-				while (true) {
-					input = getStringInput(sc);
-					if (input.equals("e")) {
-						break;
-					}
-				}
+				while (!sc.hasNext())
+					;
+				sc.next();
 
 				return status;
 				// enter the string of the char code (that displays if its part
@@ -485,7 +507,8 @@ public class GameOfCluedo {
 		status = STATUS.SHOW_CARDS;
 		displayBoard(player);
 
-		while (!sc.hasNext());
+		while (!sc.hasNext())
+			;
 		sc.next();
 		return STATUS.START_TURN; // Returns the player to their main
 		// menu
@@ -497,18 +520,13 @@ public class GameOfCluedo {
 	 * @return A random number between 1 and 6 for the player.
 	 */
 	private int rollDice() {
-		// Random rand = new Random();
-		// while(true){
-		// int i = rand.nextInt(6) + 1;
-		// if(i != 0){
-		// return i;
-		// }
-		//
-		// if(i > 6){
-		// System.out.println("Dice roll is greater than 6" + i);
-		// }
-		// }
-		return 19;
+		Random rand = new Random();
+		while (true) {
+			int i = rand.nextInt(6) + 1;
+			if (i != 0) {
+				return i;
+			}
+		}
 	}
 
 	/**
@@ -583,6 +601,7 @@ public class GameOfCluedo {
 								+ selected.getName() + ".\n\n\n");
 						players.add(new Player(name, selected));
 						selectedSuspects[counter] = selected;
+						selected.makePresent();
 						counter++;
 						break; // break the loop, ready for the next player
 					} else {
@@ -652,7 +671,8 @@ public class GameOfCluedo {
 		int numPlayers;
 		while (true) {
 			try {
-				String input = sc.next();  inputCounter++;  //Ignores any letters
+				String input = sc.next();
+				inputCounter++; // Ignores any letters
 				System.out.println("input: " + input);
 
 				numPlayers = Integer.parseInt(input);
@@ -661,7 +681,7 @@ public class GameOfCluedo {
 					return numPlayers;
 				} else {
 					System.out
-					.println("The number of players must be between 3 and 6 (inclusive).\n Please try again:");
+							.println("The number of players must be between 3 and 6 (inclusive).\n Please try again:");
 					continue;
 				}
 			} catch (NumberFormatException e) {

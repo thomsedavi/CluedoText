@@ -69,7 +69,7 @@ public class GameLogicTests {
 	@Test
 	public void validPlayersAreEliminated1() throws InterruptedException{
 		GameOfCluedo game = new GameOfCluedo(players,cards);
-		assertFalse(game.noMorePlayers());
+		assertEquals(game.playersRemaining(), 2);
 	}
 
 	@Test
@@ -80,7 +80,7 @@ public class GameLogicTests {
 			p.eliminate();
 		}
 
-		assertTrue(game.noMorePlayers());
+		assertEquals(game.playersRemaining(), 0);
 	}
 
 

@@ -69,7 +69,7 @@ public class Hud {
 
 	private String winGame(int y, Player player) {
 		if (y == 0)
-			return player.getName() + " has guessed correctly!";
+			return player.getName() + " has won the game!";
 		else if (y == 2)
 			return "It was " + game.getCards().get(1);
 		else if (y == 3)
@@ -88,7 +88,7 @@ public class Hud {
 		else if (y == 2)
 			return "* " + game.getCardToBeDisplayed().toString() + "!";
 		else if (y == 4)
-			return "Press (E) to continue";
+			return "Enter any key to continue";
 		else
 			return "";
 	}
@@ -101,7 +101,7 @@ public class Hud {
 		if (y == 0)
 			return player.getName() + " has matching cards...";
 		else if (y == 1)
-			return "Please press enter any key when ready";
+			return "Enter any key when ready";
 		else
 			return "";
 	}
@@ -235,7 +235,7 @@ public class Hud {
 				return playerSuspects[y - 2].getName() + " ("
 						+ playerSuspects[y - 2].getCode() + ") *";
 			else if (game.playerIsEliminated(playerSuspects[y - 2]))
-				return playerSuspects[y - 2].getName() + " X";
+				return playerSuspects[y - 2].getName() + " XX";
 			else
 				return playerSuspects[y - 2].getName() + " ("
 						+ playerSuspects[y - 2].getCode() + ")";
