@@ -57,7 +57,8 @@ public class GameOfCluedo {
 
 	private Card cardToBeDisplayed;
 
-	public int inputCounter = 0;	//FOR TESTING ONLY - COUNTS THE NUMBER OF TIMES INPUT IS REQUIRED
+	public int inputCounter = 0; // FOR TESTING ONLY - COUNTS THE NUMBER OF
+									// TIMES INPUT IS REQUIRED
 
 	public GameOfCluedo() throws InterruptedException {
 		cards = new ArrayList<>();
@@ -67,8 +68,9 @@ public class GameOfCluedo {
 		run(sc);
 	}
 
-	//TEST CONSTRUCTOR
-	public GameOfCluedo(List<Player> players, List<Card> cards) throws InterruptedException {
+	// TEST CONSTRUCTOR
+	public GameOfCluedo(List<Player> players, List<Card> cards)
+			throws InterruptedException {
 		this.players = players;
 		this.cards = cards;
 	}
@@ -138,7 +140,8 @@ public class GameOfCluedo {
 			displayBoard(player);
 
 			// System.out.println("\n\nChoose from the displayed actions: \n");
-			String input = getStringInput(sc); inputCounter++;
+			String input = getStringInput(sc);
+			inputCounter++;
 
 			switch (input) {
 
@@ -210,7 +213,8 @@ public class GameOfCluedo {
 				int i; // get the number of the exit
 
 				while (true) {
-					i = parseInteger(player, sc); inputCounter++;
+					i = parseInteger(player, sc);
+					inputCounter++;
 					if (board.canUseExit(suspect, i)) {
 						board.exitRoom(suspect, i);
 						break; // Break out of the user input loop
@@ -308,6 +312,7 @@ public class GameOfCluedo {
 		cards.add(weapon);
 
 		if (deck.checkSolution(suspect, room, weapon)) {
+			System.out.println("Winnr");
 			status = STATUS.WIN_GAME;
 			displayBoard(player);
 			isWon = true;
@@ -357,12 +362,8 @@ public class GameOfCluedo {
 				status = STATUS.AWAIT_PLAYER;
 				displayBoard(p);
 
-				while (true) {
-					String input = sc.next();
-					if (input.equalsIgnoreCase("E")) {
-						break;
-					}
-				}
+				while (!sc.hasNext());
+				sc.next();
 
 				status = STATUS.REVEAL_CARD; // this skips the player if they
 				// don't have suspicion cards
@@ -482,13 +483,10 @@ public class GameOfCluedo {
 		status = STATUS.SHOW_CARDS;
 		displayBoard(player);
 
-		while (true) {
-			String input = sc.next();
-			if (input.equalsIgnoreCase("E")) {
-				return STATUS.START_TURN; // Returns the player to their main
-				// menu
-			}
-		}
+		while (!sc.hasNext());
+		sc.next();
+		return STATUS.START_TURN; // Returns the player to their main
+		// menu
 	}
 
 	/**
@@ -562,9 +560,10 @@ public class GameOfCluedo {
 			}
 
 			// Adds the selected suspect to the players hand, removes from list
-			while(true) {
+			while (true) {
 				try {
-					int selection = sc.nextInt(); inputCounter++;
+					int selection = sc.nextInt();
+					inputCounter++;
 
 					if (selection > 0 && selection <= tempSuspects.size()) {
 						Suspect selected = tempSuspects.get(selection - 1);
@@ -598,11 +597,13 @@ public class GameOfCluedo {
 	private String enterName(int i, Scanner sc) {
 		while (true) {
 			System.out.println("Player " + i + ", please enter your name:");
-			String input = sc.next(); inputCounter++;
+			String input = sc.next();
+			inputCounter++;
 
 			while (true) {
 				System.out.println("\nIs " + input + " the name you want?");
-				String answer = sc.next(); inputCounter++;
+				String answer = sc.next();
+				inputCounter++;
 
 				if (answer.equalsIgnoreCase("Y")) {
 					return input;
