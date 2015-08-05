@@ -99,7 +99,7 @@ public class GameOfCluedo {
 	 * @throws InterruptedException
 	 */
 	private void run(Scanner sc) throws InterruptedException {
-		while (!isWon) {
+		while (true) { // checks if the game has been won
 			for (Player player : players) {
 
 				if (playersRemaining() == 1) { // Checks if there are more players
@@ -118,6 +118,9 @@ public class GameOfCluedo {
 					continue;
 				}
 				getHudInput(player, sc); // Present options to the player
+				if(isWon){
+					return;
+				}
 			}
 		}
 	}
@@ -360,10 +363,6 @@ public class GameOfCluedo {
 		cards.add(room); // get the room the player's
 		// suspect is in
 
-		// now cycle around the players while the suggestion is made
-		// Suggestion sg = new Suggestion(players);
-		// Card [] weaponAndSuspect = sg.cyclePlayers();
-
 		status = STATUS.CHOOSE_SUSPECT;
 		message = "In the " + player.getSuspect().getRoom().getName() + "...";
 		displayBoard(player);
@@ -379,12 +378,10 @@ public class GameOfCluedo {
 		board.moveWeapon(weapon, room);
 		cards.add(weapon);
 
-		// cycle through players
 		for (Player p : players) {
 			if (p.equals(player)) {
 				continue;
 			}
-			// cards
 			if (p.qtyMatching(cards) > 0) {
 				status = STATUS.AWAIT_PLAYER;
 				displayBoard(p);
@@ -519,13 +516,11 @@ public class GameOfCluedo {
 	 *
 	 * @return A random number between 1 and 6 for the player.
 	 */
-	private int rollDice() {
+	public int rollDice() {
 		Random rand = new Random();
-		while (true) {
+		while(true){
 			int i = rand.nextInt(6) + 1;
-			if (i != 0) {
-				return i;
-			}
+			return i;
 		}
 	}
 
