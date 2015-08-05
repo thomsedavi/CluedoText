@@ -23,4 +23,9 @@ public interface Tile {
 	 */
 	abstract void setSuspect(Suspect suspect);	//Sets the suspect in this position
 
+	/**
+	 * @param suspect removes this when Suspect has been eliminated from game.
+	 */
+	abstract void removeSuspect(Suspect suspect);
+
 }

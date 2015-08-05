@@ -44,4 +44,9 @@ public class Corridor implements Tile {
 		else
 			throw new InvalidMoveError("Suspect cannot move onto this tile");
 	}
+
+	@Override
+	public void removeSuspect(Suspect suspect) {
+		this.suspect = null;
+	}
 }

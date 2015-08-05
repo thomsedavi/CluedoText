@@ -66,4 +66,9 @@ public class Exit implements Tile {
 	public int getY() {
 		return y;
 	}
+
+	@Override
+	public void removeSuspect(Suspect suspect) {
+		this.suspect = null;
+	}
 }

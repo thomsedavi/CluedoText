@@ -82,4 +82,10 @@ public class Door implements Tile {
 		room.addSuspect(suspect);
 		suspect.setRoom(room);
 	}
+
+	@Override
+	public void removeSuspect(Suspect suspect) {
+		room.removeSuspect(suspect);
+
+	}
 }
