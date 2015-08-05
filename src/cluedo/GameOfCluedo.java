@@ -312,7 +312,7 @@ public class GameOfCluedo {
 		cards.add(weapon);
 
 		if (deck.checkSolution(suspect, room, weapon)) {
-			System.out.println("Winnr");
+			System.out.println("Winner");
 			status = STATUS.WIN_GAME;
 			displayBoard(player);
 			isWon = true;
@@ -320,7 +320,6 @@ public class GameOfCluedo {
 		} else {
 			message = "You guessed wrong :(\n" + player.getName()
 					+ " was eliminated from the game!";
-			// status = STATUS.START_TURN;
 			player.eliminate();
 			board.eliminateSuspect(player.getSuspect(), player.getSuspect()
 					.getX(), player.getSuspect().getY());
@@ -336,8 +335,10 @@ public class GameOfCluedo {
 	 * @param status
 	 * @param sc
 	 * @return
+	 *
+	 * 021 025 39424
 	 */
-	private STATUS makeSuggestion(Player player, Scanner sc) { // TODO
+	private STATUS makeSuggestion(Player player, Scanner sc) {
 
 		cards.clear();
 		cards.add(player.getSuspect().getRoom()); // get the room the player's
@@ -401,8 +402,6 @@ public class GameOfCluedo {
 				}
 
 				return status;
-				// enter the string of the char code (that displays if its part
-				// of it)
 			}
 		}
 		message = "No matching cards!";

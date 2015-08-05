@@ -22,8 +22,8 @@ public class Board {
 	public static final int BOARD_WIDTH = 26;
 	public static final int BOARD_HEIGHT = 27;
 
-	Tile[][] tiles;
-	Room[] rooms;
+	private Tile[][] tiles;
+	private Room[] rooms;
 
 	/**
 	 * Reads a Map from a file and parses it into Tiles to place at each point
