@@ -422,7 +422,8 @@ public class GameOfCluedo {
 				status = STATUS.DISPLAY_CARD;
 				displayBoard(p);
 
-				while (!sc.hasNext()) //Waits for any input before moving on.
+				while (!sc.hasNext())
+					// Waits for any input before moving on.
 					;
 				sc.next();
 
@@ -431,7 +432,7 @@ public class GameOfCluedo {
 			thisPlayer++;
 			thisPlayer %= players.size();
 			p = players.get(thisPlayer);
-		} while (!p.equals(player)); //ends loop when gets to current player
+		} while (!p.equals(player)); // ends loop when gets to current player
 		message = "No matching cards!";
 		return status;
 
@@ -500,7 +501,8 @@ public class GameOfCluedo {
 	}
 
 	/**
-	 * Displays the cards for the player.
+	 * Displays the cards for the player and waits for them to confirm that it
+	 * is okay to hide them again.
 	 *
 	 * @param player
 	 * @param sc
@@ -533,6 +535,8 @@ public class GameOfCluedo {
 	 * Sets the board up for the players
 	 */
 	public void initialise(Scanner sc) {
+		// All of the corner rooms teleport to
+		// the opposite corner room
 		ROOMS[0].addTeleport(ROOMS[5]);
 		ROOMS[5].addTeleport(ROOMS[0]);
 		ROOMS[2].addTeleport(ROOMS[7]);
@@ -559,7 +563,7 @@ public class GameOfCluedo {
 
 		hud = new Hud(suspects, SUSPECTS, WEAPONS, ROOMS, this);
 
-		message = "\nOk, set! Player 1, start.\n";
+		message = "Ok, set! Player 1, start.";
 	}
 
 	/**
@@ -573,7 +577,8 @@ public class GameOfCluedo {
 		List<Suspect> tempSuspects = new ArrayList<Suspect>(
 				Arrays.asList(SUSPECTS));
 		Suspect[] selectedSuspects = new Suspect[numPlayers];
-		int counter = 0;
+		int counter = 0; // When player selects a Suspect it gets added to the
+							// list of selectedSuspects based on this counter.
 
 		System.out.println("\n=== SELECT PLAYERS ===\n");
 
@@ -618,7 +623,8 @@ public class GameOfCluedo {
 	}
 
 	/**
-	 * Allow the user to enter the name for their character.
+	 * Allow the user to enter the name for their character, then confirms that
+	 * this is the correct name.
 	 *
 	 * @return The name of the player
 	 */
@@ -690,6 +696,17 @@ public class GameOfCluedo {
 		}
 	}
 
+	/**
+	 * Prints a lot of blank lines. If the Suspect is in a room and they are
+	 * exiting the room it will 'show exits' for that room, which will show up
+	 * on the Board. After board has been printed, room exit numbers are hidden
+	 * again.
+	 *
+	 * Scan lines by getting input from Board and then Hud for each line, then
+	 * printing it.
+	 *
+	 * @param player
+	 */
 	private void displayBoard(Player player) {
 
 		String result;
@@ -745,6 +762,10 @@ public class GameOfCluedo {
 		return board;
 	}
 
+
+	/**
+	 * checks whether the Player for a particular Suspect has been eliminated.
+	 */
 	public boolean playerIsEliminated(Suspect suspect) {
 		for (Player p : players) {
 			if (p.getSuspect().equals(suspect) && p.isEliminated())

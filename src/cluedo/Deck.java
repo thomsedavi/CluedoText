@@ -6,15 +6,18 @@ import java.util.List;
 import java.util.Random;
 
 /**
- * Contains the deck of cards.
+ * Contains the deck of Cards. Picks a Weapon, Room and Suspect at random to
+ * make into the solution. Sorts the remainder and distributes them evenly to
+ * the players.
  *
  * @author Pauline Kelly
  *
  */
 public class Deck {
 
-	private List<Card> allCards;
-	private List<Card> dealingCards;
+	private List<Card> allCards; // all possible cards
+	private List<Card> dealingCards; // the remainder of cards that are being
+										// dealt out
 	private Card[] solution = new Card[3];
 
 	public Deck(List<Weapon> weapons, List<Room> rooms, List<Suspect> suspects) {
@@ -24,7 +27,7 @@ public class Deck {
 		shuffleCards(weapons, rooms, suspects);
 
 		System.out.print("Solution is: ");
-		for(Card c : solution){
+		for (Card c : solution) {
 			System.out.print(c + " ");
 		}
 		System.out.println("\n");
@@ -39,7 +42,8 @@ public class Deck {
 		while (true) {
 
 			for (Player p : players) {
-				p.addToHand(dealingCards.remove(0)); // removes the first card, others
+				p.addToHand(dealingCards.remove(0)); // removes the first card,
+														// others
 				// slide down
 				if (dealingCards.isEmpty()) {
 					return players;
@@ -71,9 +75,8 @@ public class Deck {
 	}
 
 	/**
-	 * Shuffles the cards into one group.
-	 *
-	 * @return The List of shuffled cards.
+	 * Adds all the cards together, removes the solution Cards and then shuffles
+	 * the remainder..
 	 */
 	public void shuffleCards(List<Weapon> weapons, List<Room> rooms,
 			List<Suspect> suspects) {
@@ -91,14 +94,6 @@ public class Deck {
 		Collections.shuffle(dealingCards);
 	}
 
-	public Card[] getSolution() {
-		return solution;
-	}
-
-	public void setSolution(Card[] solution) {
-		this.solution = solution;
-	}
-
 	/**
 	 * Checks the solution against the suggestion or the accusation.
 	 *
@@ -111,16 +106,18 @@ public class Deck {
 	 * @return Whether all the Cards match
 	 */
 	public boolean checkSolution(Suspect suspect, Room room, Weapon weapon) {
-		System.out.println("S:" + solution[0] + "R:" + solution[1] + "W"
-				+ solution[2]);
-		System.out.println("S:" + suspect + "R:" + room + "W" + weapon);
-
 		if (suspect.equals(solution[0]) && room.equals(solution[1])
 				&& weapon.equals(solution[2])) {
 			return true;
 		}
 		return false;
 	}
+
+	/**
+	 * @param str
+	 *            2-letter code of Card
+	 * @return if this is a valid code
+	 */
 
 	public boolean checkCodeIsValid(String str) {
 		Card result = getCardFromCode(str);
@@ -131,6 +128,11 @@ public class Deck {
 
 	}
 
+	/**
+	 * @param str
+	 *            2-letter code of card
+	 * @return
+	 */
 	public Card getCardFromCode(String str) {
 		Card result = null;
 
