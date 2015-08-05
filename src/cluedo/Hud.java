@@ -13,7 +13,7 @@ public class Hud {
 
 	public enum STATUS {
 		START_TURN, SHOW_CARDS, MOVE_PIECE, EXIT_ROOM, CHOOSE_ROOM,
-		CHOOSE_SUSPECT, CHOOSE_WEAPON, REVEAL_CARD, AWAIT_PLAYER, DISPLAY_CARD;
+		CHOOSE_SUSPECT, CHOOSE_WEAPON, REVEAL_CARD, AWAIT_PLAYER, DISPLAY_CARD, WIN_GAME;
 	}
 
 	private Suspect[] suspects, playerSuspects;
@@ -61,8 +61,25 @@ public class Hud {
 			return awaitPlayer(y, player);
 		case DISPLAY_CARD:
 			return displayCard(y, player);
+		case WIN_GAME:
+			return winGame(y, player);
 		}
 		return "";
+	}
+
+	private String winGame(int y, Player player) {
+		if (y == 0)
+			return player.getName() + " has guessed correctly!";
+		else if (y == 2)
+			return "It was " + game.getCards().get(1);
+		else if (y == 3)
+			return "in the " + game.getCards().get(0);
+		else if (y == 4)
+			return "with the " + game.getCards().get(2);
+		else if (y == 6)
+			return "Game Over!";
+		else
+			return "";
 	}
 
 	private String displayCard(int y, Player player) {
@@ -217,6 +234,8 @@ public class Hud {
 			if (suspect.equals(playerSuspects[y - 2]))
 				return playerSuspects[y - 2].getName() + " ("
 						+ playerSuspects[y - 2].getCode() + ") *";
+			else if (game.playerIsEliminated(playerSuspects[y - 2]))
+				return playerSuspects[y - 2].getName() + " X";
 			else
 				return playerSuspects[y - 2].getName() + " ("
 						+ playerSuspects[y - 2].getCode() + ")";

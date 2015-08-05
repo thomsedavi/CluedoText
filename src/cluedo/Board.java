@@ -303,4 +303,8 @@ public class Board {
 		tiles[newX][newY].setSuspect(suspect);
 		suspect.setLocation(newX, newY);
 	}
+
+	public void eliminateSuspect(Suspect s, int x, int y) {
+		tiles[x][y].removeSuspect(s);
+	}
 }

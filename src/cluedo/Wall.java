@@ -20,4 +20,9 @@ public class Wall implements Tile {
 	public void setSuspect(Suspect suspect) {
 		throw new InvalidMoveError("Suspect cannot move onto this tile"); //bummer
 	}
+
+	@Override
+	public void removeSuspect(Suspect suspect) {
+		throw new InvalidMoveError("Suspect cannot be on this tile"); //bummer
+	}
 }
