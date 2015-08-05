@@ -18,11 +18,11 @@ public class Wall implements Tile {
 
 	@Override
 	public void setSuspect(Suspect suspect) {
-		throw new InvalidMoveError("Suspect cannot move onto this tile"); //bummer
+		throw new InvalidMoveError("Suspect cannot move onto this tile");
 	}
 
 	@Override
 	public void removeSuspect(Suspect suspect) {
-		throw new InvalidMoveError("Suspect cannot be on this tile"); //bummer
+		throw new InvalidMoveError("Suspect cannot be on this tile");
 	}
 }

@@ -35,6 +35,9 @@ public class MovementTests {
 
 	private Board board;
 
+	/**
+	 * Sets up the board.
+	 */
 	@Before
 	public void before() {
 
@@ -115,7 +118,7 @@ public class MovementTests {
 	}
 
 	@Test
-	public void testCanMoveCorrider() {
+	public void testCanMoveCorridor() {
 		assertTrue("1", board.canMove(SUSPECTS[0], Direction.NORTH));
 		assertFalse("2", board.canMove(SUSPECTS[0], Direction.EAST));
 		assertFalse("3", board.canMove(SUSPECTS[0], Direction.SOUTH));

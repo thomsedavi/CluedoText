@@ -46,6 +46,10 @@ public class Suspect extends Card {
 		return room; //can return null
 	}
 
+	/**
+	 * Whether or not the suspect is in the room.
+	 * @return
+	 */
 	public boolean isInRoom() {
 		return room != null;
 	}
