@@ -4,18 +4,14 @@ import static org.junit.Assert.*;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 import org.junit.*;
 
-import cluedo.Board;
 import cluedo.Card;
-import cluedo.Direction;
 import cluedo.GameOfCluedo;
-import cluedo.Hud;
 import cluedo.Player;
 import cluedo.Room;
 import cluedo.Suspect;
@@ -50,10 +46,8 @@ public class InputTests {
 	//Create a list of dummy players and cards
 	private List<Player> players = new ArrayList<Player>();
 	private List<Card> cards = new ArrayList<Card>();
+	private Scanner sc;
 
-	/**
-	 * Sets up the board for the tests
-	 */
 	@Before
 	public void before() {
 		cards.add(SUSPECTS[0]);
@@ -61,41 +55,51 @@ public class InputTests {
 		cards.add(ROOMS[0]);
 	}
 
+	@After
+	public void after(){
+		sc.close();
+	}
 
 	@Test
 	public void tryInitialiseWith3Players() throws InterruptedException, FileNotFoundException{
 		GameOfCluedo game = new GameOfCluedo(players,cards);
-		Scanner sc = new Scanner(new File("3playerInitialisation.txt"));
-
-		game.initialise(sc);  //reads in initialisation file
-		assertEquals(3,game.getPlayers().size());
-	}
-
-	@Test
-	public void tryInitialiseWith0Players() throws InterruptedException, FileNotFoundException{
-//		GameOfCluedo game = new GameOfCluedo(players,cards);
-//		Scanner sc = new Scanner(new File("3playerInitialisation.txt"));
-//
-//		game.initialise(sc);  //reads in initialisation file
-//		assertEquals(3,game.getPlayers().size());
-	}
-
-	@Test
-	public void countInput() throws InterruptedException, FileNotFoundException{
-		GameOfCluedo game = new GameOfCluedo(players,cards);
-		Scanner sc = new Scanner(new File("3playerInitialisation.txt"));
-
-		game.initialise(sc);  //reads in initialisation file
-
+		sc = new Scanner(new File("TestingFiles/3playerInitialisation.txt"));
+		game.initialise(sc);
 		assertEquals(10,game.inputCounter);  //1 for numPlayers, 3 names * 3 players
 	}
 
 	@Test
-	public void invalidHudInput1(){
-
+	public void tryInitialiseWith0Players() throws InterruptedException, FileNotFoundException{
+		GameOfCluedo game = new GameOfCluedo(players,cards);
+		sc = new Scanner(new File("TestingFiles/0playerInitialisation.txt"));
+		game.initialise(sc);
+		assertNotEquals(10, game.inputCounter);  //Addition input used in error handling
 	}
 
+	@Test
+	public void tryInitialiseWith7Players() throws InterruptedException, FileNotFoundException{
+		GameOfCluedo game = new GameOfCluedo(players,cards);
+		sc = new Scanner(new File("TestingFiles/7playerInitialisation.txt"));
+		game.initialise(sc);
+		assertNotEquals(10, game.inputCounter);  //Addition input used in error handling
+	}
 
+	@Test
+	public void tryInitialiseWithQPlayers() throws InterruptedException, FileNotFoundException{  //Checks for non-integer input
+		GameOfCluedo game = new GameOfCluedo(players,cards);
+		sc = new Scanner(new File("TestingFiles/QplayerInitialisation.txt"));
+		game.initialise(sc);
+		assertNotEquals(10, game.inputCounter);  //Addition input used in error handling
+	}
+
+	//	@Test
+	//	public void tryInitialiseWith3Players() throws InterruptedException, FileNotFoundException{
+	//		GameOfCluedo game = new GameOfCluedo(players,cards);
+	//		Scanner sc = new Scanner(new File("3playerInitialisation.txt"));
+	//
+	//		game.initialise(sc);  //reads in initialisation file
+	//		assertEquals(3,game.getPlayers().size());
+	//	}
 }
 
 
