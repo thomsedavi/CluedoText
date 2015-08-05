@@ -35,10 +35,10 @@ public class RoomTile implements Tile {
 	}
 
 	/**
-	 * Whether or not the element on this tile can move //Is this the tiles
-	 * responsibility
+	 * The Player cannot move onto a Room tile. They can only be put in
+	 * their specified position.
 	 *
-	 * @return
+	 * @return if the player can move here.
 	 */
 	public boolean canMove(Direction direction) {
 		return false; // Cannot move onto this tile

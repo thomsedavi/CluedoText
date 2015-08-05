@@ -71,7 +71,7 @@ public class Hud {
 	 * Which player has won the game, and the winning suggestion/accusation.
 	 * @param y Horizontal line being scanned
 	 * @param player The player that has won.
-	 * @return The
+	 * @return The congratulating String.
 	 */
 	private String winGame(int y, Player player) {
 		if (y == 0)
@@ -88,6 +88,12 @@ public class Hud {
 			return "";
 	}
 
+	/**
+	 * Displays the card from the specified player in a suggestion.
+	 * @param y Horizontal line being scanned
+	 * @param player Player that is being interrogated
+	 * @return The information to be displayed.
+	 */
 	private String displayCard(int y, Player player) {
 		if (y == 0)
 			return player.getName() + " has chosen to display:";
@@ -102,6 +108,7 @@ public class Hud {
 	/**
 	 * Used for when the game is waiting for a particular player to get to the
 	 * console and the others have turned away.
+	 * @return The information to be displayed.
 	 */
 	private String awaitPlayer(int y, Player player) {
 		if (y == 0)
@@ -118,6 +125,7 @@ public class Hud {
 	 * When a Player has one or more Cards that have been Suggested by another
 	 * player. This will display the Code of the Cards next to the cards that
 	 * can be selected.
+	 * @return The information to be displayed.
 	 */
 	private String revealCard(int y, Player player) {
 		List<Card> suggestion = game.getCards();
@@ -143,6 +151,7 @@ public class Hud {
 	/**
 	 * Displays Weapons that can be chosen when a Player makes an Accusation or
 	 * Suggestion
+	 * @return The information to be displayed.
 	 */
 	private String chooseWeapon(int y) {
 		if (y == 0)
@@ -156,6 +165,7 @@ public class Hud {
 	/**
 	 * Displays Suspects that can be chosen when a Player makes an Accusation or
 	 * Suggestion
+	 * @return The information to be displayed.
 	 */
 	private String chooseSuspect(int y) {
 		if (y == 0)
@@ -169,6 +179,7 @@ public class Hud {
 	/**
 	 * Displays Rooms that can be chosen when a Player makes an Accusation or
 	 * Suggestion
+	 * @return The information to be displayed.
 	 */
 	private String chooseRoom(int y) {
 		if (y == 0)
@@ -182,6 +193,7 @@ public class Hud {
 	/**
 	 * Shows which player is moving, the code of their Suspect piece, how many
 	 * moves are remaining to them and what the direction options are.
+	 * @return The information to be displayed.
 	 */
 	private String movePiece(int y, Player player) {
 		if (y == 0)
@@ -203,6 +215,12 @@ public class Hud {
 			return "";
 	}
 
+	/**
+	 * Displays the information needed for the player to decide how to exit a room.
+	 * @param y Horizontal line being scanned
+	 * @param player The player who wants to exit
+	 * @return The information to be displayed.
+	 */
 	private String exitRoom(int y, Player player) {
 		if (y == 0)
 			return player.getName() + "'s turn ("
@@ -215,6 +233,7 @@ public class Hud {
 
 	/**
 	 * Shows all of the Cards the a Player has in their Hand.
+	 * @return The information to be displayed.
 	 */
 	private String showCards(int y, Player player) {
 		if (y == 0)
@@ -228,8 +247,8 @@ public class Hud {
 	}
 
 	/**
-	 * Displays the options available to a Player at the beginning of their
-	 * Turn.
+	 * Displays the options available to a Player at the beginning of their turn.
+	 * @return The information to be displayed.
 	 */
 	private String startTurn(int y, Player player, boolean teleport) {
 		Suspect suspect = player.getSuspect();

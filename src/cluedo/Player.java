@@ -63,6 +63,9 @@ public class Player {
 		return result;
 	}
 
+	/**
+	 * Eliminates the player from the Game.
+	 */
 	public void eliminate() {
 		this.eliminated = true;
 	}

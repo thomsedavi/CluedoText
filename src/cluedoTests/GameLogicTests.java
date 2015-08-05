@@ -6,17 +6,16 @@ import java.util.ArrayList;
 import java.util.List;
 import org.junit.*;
 
-import cluedo.Board;
 import cluedo.Card;
 import cluedo.GameOfCluedo;
-import cluedo.Hud;
 import cluedo.Player;
 import cluedo.Room;
 import cluedo.Suspect;
 import cluedo.Weapon;
 
 /**
- * Tests that user input on the board is correct
+ * Tests that user input for the game is correct.
+ *
  * @author kellypaul1
  *
  */
@@ -41,17 +40,12 @@ public class GameLogicTests {
 			new Room("Study", "ST"), new Room("Hall", "HA"),
 			new Room("Lounge", "LO"), new Room("Dining Room", "DR") };
 
-	private Board board;
-	private GameOfCluedo game;
-
-	private Hud hud = new Hud(SUSPECTS, null, WEAPONS, ROOMS, game);
-
 	//Create a list of dummy players and cards
 	private List<Player> players = new ArrayList<Player>();
 	private List<Card> cards = new ArrayList<Card>();
 
 	/**
-	 * Sets up the board for the tests
+	 * Sets up the fields for the tests.
 	 */
 	@Before
 	public void before() {
@@ -87,15 +81,5 @@ public class GameLogicTests {
 			int num = game.rollDice();
 			assertTrue(num != 0 && num < 7);
 		}
-
 	}
-
-
-
-	@Test
-	public void invalidHudInput1(){
-
-	}
-
-
 }
